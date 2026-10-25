@@ -1,0 +1,1105 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gloock&family=Reenie+Beanie&display=swap");
+@import "tailwindcss";
+
+:root {
+  --ink: #241d1a;
+  --wine: #8d3330;
+  --orange: #d85e25;
+  --apricot: #ef9844;
+  --cream: #f5ead7;
+  --paper: #fffaf0;
+  --blush: #eab7aa;
+  --gold: #c69a45;
+  --line: rgba(36, 29, 26, 0.28);
+  color: var(--ink);
+  background: var(--cream);
+  font-family: "DM Sans", sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input { color: inherit; font: inherit; }
+button { cursor: pointer; }
+svg { width: 1.35rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.kicker { margin: 0; font-size: .66rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+
+/* Film to wardrobe transition */
+.intro { position: fixed; inset: 0; z-index: 100; overflow: hidden; background: #100d0c; }
+.intro-film { width: 100%; height: 100%; object-fit: contain; transition: transform 1.2s cubic-bezier(.76,0,.24,1), filter 1.2s ease, opacity 1.2s ease; }
+.intro-vignette { position: absolute; inset: 0; background: radial-gradient(circle, transparent 45%, rgba(0,0,0,.42)); pointer-events: none; }
+.skip-button { position: absolute; right: 2rem; bottom: 2rem; z-index: 2; padding: .7rem 1.1rem; border: 1px solid rgba(255,255,255,.7); border-radius: 99px; color: white; background: rgba(20,16,14,.35); font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; backdrop-filter: blur(8px); }
+.wardrobe-push { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .3s .55s ease; }
+.wardrobe-push span { width: 24vw; height: 38vh; border: 2px solid rgba(246,231,202,.7); box-shadow: 0 0 0 100vmax rgba(36,17,12,.42); transform: scale(.35); transition: transform 1.15s cubic-bezier(.76,0,.24,1); }
+.intro--zoom .intro-film { opacity: .15; filter: blur(6px); transform: scale(1.85); }
+.intro--zoom .wardrobe-push { opacity: 1; }
+.intro--zoom .wardrobe-push span { transform: scale(4.8); }
+.intro--zoom .skip-button { opacity: 0; }
+
+/* Shared logo and selector */
+.brand-logo { display: block; width: 10rem; height: 4.2rem; object-fit: contain; mix-blend-mode: multiply; }
+.brand-logo--light { filter: invert(1); mix-blend-mode: screen; }
+.concept-picker { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 40; width: min(24rem, calc(100vw - 2.4rem)); padding: .8rem; border: 1px solid rgba(36,29,26,.22); background: rgba(255,250,240,.9); box-shadow: 0 16px 50px rgba(67,32,19,.16); backdrop-filter: blur(14px); }
+.concept-picker > p { margin: 0 0 .55rem .25rem; font-size: .57rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
+.concept-picker > div { display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; }
+.concept-picker button { display: flex; align-items: flex-start; gap: .4rem; min-height: 3.5rem; padding: .55rem; border: 1px solid transparent; background: transparent; text-align: left; }
+.concept-picker button:hover, .concept-picker button.active { border-color: var(--ink); background: var(--paper); }
+.concept-picker button small { font-size: .5rem; opacity: .55; }
+.concept-picker button span { font: .68rem/1.1 "Gloock", serif; }
+.concept-picker button i { display: block; margin-top: .3rem; color: #74675d; font: .48rem/1.2 "DM Sans", sans-serif; }
+.set-picker { position: fixed; bottom: 1.2rem; left: 1.2rem; z-index: 42; width: min(19rem, calc(100vw - 2.4rem)); padding: .7rem; border: 1px solid rgba(36,29,26,.35); color: var(--ink); background: rgba(247,230,203,.92); box-shadow: 0 14px 45px rgba(35,18,12,.18); backdrop-filter: blur(14px); }
+.set-picker > p { margin: 0 0 .5rem .2rem; font-size: .54rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
+.set-picker > div { display: grid; grid-template-columns: repeat(3,1fr); gap: .3rem; }
+.set-picker button { display: flex; align-items: flex-start; gap: .35rem; min-height: 3.4rem; padding: .48rem; border: 1px solid transparent; background: transparent; text-align: left; }
+.set-picker button:hover, .set-picker button.active { border-color: var(--ink); background: rgba(255,250,240,.78); }
+.set-picker button small { font-size: .48rem; opacity: .5; }
+.set-picker button span { font: .62rem/1.08 "Gloock", serif; }
+.set-picker button i { display: block; margin-top: .27rem; color: #715f53; font: .43rem/1.2 "DM Sans", sans-serif; }
+
+/* Landing directions */
+.landing { position: relative; min-height: 100svh; overflow: hidden; transition: background .5s ease, color .5s ease; }
+.paper-grain { position: absolute; inset: 0; opacity: .45; pointer-events: none; background-image: radial-gradient(circle at 20% 30%, rgba(87,53,35,.07) 0 1px, transparent 1.5px), radial-gradient(circle at 70% 60%, rgba(255,255,255,.28) 0 1px, transparent 1.5px), repeating-linear-gradient(12deg, transparent 0 11px, rgba(80,43,30,.025) 12px); background-size: 9px 9px, 13px 13px, auto; mix-blend-mode: multiply; }
+.landing-header { position: relative; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 1.15rem clamp(1rem,4vw,4rem); border-bottom: 1px solid currentColor; }
+.landing-header span { font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; }
+.landing-copy { position: relative; z-index: 4; width: min(64rem, 92vw); margin: 0 auto; padding: clamp(4.8rem,11vh,8rem) 1rem 10rem; text-align: center; }
+.reveal-logo { position: relative; width: min(48rem, 80vw); margin: 1rem auto .7rem; padding: clamp(1.2rem,3vw,2.2rem); }
+.reveal-logo::before { position: absolute; inset: 8% 2%; z-index: -1; content: ""; background: rgba(255,250,240,.86); box-shadow: 0 20px 60px rgba(67,32,19,.16); clip-path: polygon(2% 4%,98% 0,100% 90%,95% 100%,4% 96%,0 12%); transform: rotate(-1deg); }
+.reveal-logo .brand-logo { width: 100%; height: clamp(10rem,23vw,18rem); }
+.landing-copy h1 { margin: 0 0 1rem; font: 400 clamp(1.25rem,2.2vw,2rem)/1.1 "Gloock", serif; letter-spacing: -.025em; }
+.landing-copy h1 em { color: var(--orange); font-weight: 400; }
+.landing-copy > p:not(.kicker) { width: min(32rem, 92%); margin: 0 auto; font-family: "Gloock", serif; font-size: clamp(.95rem,1.6vw,1.2rem); line-height: 1.55; }
+.landing-actions { display: flex; align-items: center; justify-content: center; gap: 1.4rem; margin-top: 1.7rem; }
+.primary-action, .signup-sheet form > button, .signup-success > button { display: inline-flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem 1.4rem; border: 1px solid var(--wine); color: white; background: var(--wine); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+.text-action { padding: .7rem 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; font-size: .67rem; letter-spacing: .06em; }
+.fabric-swatch { position: absolute; z-index: 2; margin: 0; padding: .65rem .65rem 1.8rem; background: var(--paper); box-shadow: 0 13px 30px rgba(70,33,20,.18); transition: transform .55s ease; }
+.fabric-swatch img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.fabric-swatch figcaption { margin-top: .45rem; font: 1rem "Reenie Beanie", cursive; text-align: center; }
+.landing-swatch--one { top: 20%; left: 4%; width: clamp(8rem,14vw,13rem); height: clamp(12rem,20vw,18rem); transform: rotate(-7deg); }
+.landing-swatch--two { top: 18%; right: 5%; width: clamp(7rem,12vw,11rem); height: clamp(10rem,17vw,15rem); transform: rotate(6deg); }
+.landing-swatch--three { right: 10%; bottom: 12%; width: clamp(7rem,10vw,10rem); height: clamp(8rem,13vw,12rem); transform: rotate(-4deg); }
+.landing-stamp { position: absolute; bottom: 8%; left: 9%; z-index: 3; display: grid; width: 5.2rem; height: 5.2rem; place-items: center; border: 1px solid var(--wine); border-radius: 50%; color: var(--wine); transform: rotate(-12deg); }
+.landing-stamp::before { position: absolute; inset: .3rem; border: 1px dashed var(--wine); border-radius: inherit; content: ""; }
+.landing-stamp span { font: 1.6rem "Gloock", serif; }
+.landing-stamp i { position: absolute; bottom: .8rem; font-size: .5rem; }
+.landing-note { position: absolute; top: 23%; left: 20%; z-index: 3; margin: 0; font: 1.7rem "Reenie Beanie", cursive; transform: rotate(-8deg); }
+.set-collage { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.set-collage span { position: absolute; display: block; background-position: center; background-size: cover; }
+.set-collage i { position: absolute; z-index: 2; font: 1.7rem "Reenie Beanie", cursive; }
+
+.landing--paper-label { background: radial-gradient(circle at 44% 38%, rgba(255,250,240,.86), transparent 28%), linear-gradient(142deg, #f4c28e, #ef9844 46%, #d85e25 75%, #8d3330); }
+.landing--paper-label::before, .landing--paper-label::after { position: absolute; z-index: 1; content: ""; background: var(--wine); opacity: .84; }
+.landing--paper-label::before { top: 10%; left: -5%; width: 34%; height: 25%; clip-path: polygon(0 7%,96% 0,100% 90%,8% 100%); transform: rotate(-5deg); }
+.landing--paper-label::after { right: -8%; bottom: 2%; width: 38%; height: 26%; background: var(--apricot); clip-path: polygon(5% 0,100% 8%,100% 100%,0 88%); transform: rotate(4deg); }
+.landing--paper-label .reveal-logo { padding-inline: 4rem; }
+.landing--paper-label .reveal-logo::before { box-shadow: 10px 14px 0 rgba(141,51,48,.22), 0 28px 70px rgba(67,32,19,.2); }
+.landing--paper-label .landing-swatch--one { top: 16%; left: 4%; transform: rotate(-10deg); }
+.landing--paper-label .landing-swatch--two { top: 19%; right: 4%; transform: rotate(8deg); }
+
+.landing--fabric-portal { background: var(--cream); }
+.landing--fabric-portal::before, .landing--fabric-portal::after { position: absolute; top: 9%; bottom: 0; z-index: 1; width: 31%; content: ""; box-shadow: inset 0 0 80px rgba(20,7,7,.32); }
+.landing--fabric-portal::before { left: 0; background: linear-gradient(rgba(141,51,48,.38),rgba(141,51,48,.38)), url("/assets/fabric-red-weave.png") center/cover; clip-path: polygon(0 0,90% 3%,100% 50%,88% 100%,0 96%); }
+.landing--fabric-portal::after { right: 0; background: linear-gradient(rgba(216,94,37,.2),rgba(216,94,37,.2)), url("/assets/fabric-gold.png") center/cover; clip-path: polygon(12% 3%,100% 0,100% 96%,12% 100%,0 50%); }
+.landing--fabric-portal .reveal-logo { width: min(44rem,72vw); }
+.landing--fabric-portal .reveal-logo::before { border: 1px solid var(--wine); box-shadow: 8px 9px 0 var(--orange); transform: rotate(1deg); }
+.landing--fabric-portal .landing-swatch--one { top: auto; left: 5%; bottom: 8%; }
+.landing--fabric-portal .landing-swatch--two { top: 16%; right: 5%; }
+.landing--fabric-portal .landing-swatch--three { right: 15%; bottom: 8%; }
+
+.landing--after-dark { color: #f8ecda; background: #251a18 url("/assets/fabric-burgundy.png") center/cover; }
+.landing--after-dark::before { position: absolute; inset: 0; content: ""; background: rgba(25,12,13,.76); }
+.landing--after-dark .reveal-logo { width: min(54rem,82vw); }
+.landing--after-dark .reveal-logo::before { background: rgba(37,26,24,.56); border: 1px solid rgba(239,152,68,.38); box-shadow: 0 30px 100px rgba(0,0,0,.4); }
+.landing--after-dark .landing-copy h1 em { color: var(--apricot); }
+.landing--after-dark .landing-copy > p:not(.kicker) { color: #e1c9b1; }
+.landing--after-dark .primary-action { color: var(--ink); border-color: var(--apricot); background: var(--apricot); }
+.landing--after-dark .landing-swatch { border: 1px solid rgba(240,152,68,.5); background: #352522; }
+.landing--after-dark .landing-swatch--one { top: 21%; left: 4%; width: 12vw; height: 35vh; transform: rotate(-5deg); }
+.landing--after-dark .landing-swatch--two { top: 19%; right: 5%; width: 11vw; height: 31vh; transform: rotate(5deg); }
+.landing--after-dark .landing-swatch--three { display: none; }
+.landing--after-dark .landing-note { top: 24%; left: auto; right: 16%; color: var(--apricot); }
+.landing--after-dark .landing-stamp { left: 5%; color: var(--apricot); border-color: var(--apricot); }
+.landing--after-dark .landing-stamp::before { border-color: var(--apricot); }
+
+/* Signup variations */
+.signup-overlay { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 1rem; }
+.signup-backdrop { position: absolute; inset: 0; border: 0; background: rgba(39,20,15,.66); backdrop-filter: blur(7px); }
+.signup-sheet { position: relative; z-index: 2; width: min(31rem, 94vw); padding: clamp(2rem,5vw,4.2rem); color: var(--ink); background: var(--paper); box-shadow: 0 28px 100px rgba(29,11,8,.42); transform: rotate(-1deg); animation: sheet-in .65s cubic-bezier(.16,1,.3,1) both; }
+.signup-sheet::before { position: absolute; inset: .6rem; border: 1px solid rgba(141,51,48,.23); content: ""; pointer-events: none; }
+.tape { position: absolute; top: -.8rem; left: calc(50% - 3.2rem); z-index: 3; width: 6.4rem; height: 1.7rem; background: rgba(224,190,132,.7); transform: rotate(3deg); }
+.sheet-close { position: absolute; top: 1.1rem; right: 1.2rem; z-index: 4; width: 2rem; height: 2rem; border: 0; background: transparent; font: 1.7rem/1 sans-serif; }
+.signup-swatch { position: absolute; top: 3.2rem; right: -3.5rem; width: 6.5rem; height: 7.5rem; padding: .45rem; background: white; box-shadow: 0 10px 25px rgba(60,20,14,.18); transform: rotate(8deg); }
+.signup-swatch img { width: 100%; height: 100%; object-fit: cover; }
+.signup-sheet h2 { margin: .8rem 0 1.2rem; font: 400 clamp(2.9rem,7vw,4.4rem)/.9 "Gloock", serif; letter-spacing: -.05em; }
+.signup-copy { margin: 0 0 1.6rem; color: #6d5e52; font-size: .83rem; line-height: 1.65; }
+.signup-sheet form { display: grid; gap: 1rem; }
+.signup-sheet label span { display: block; margin-bottom: .25rem; font-size: .56rem; letter-spacing: .13em; text-transform: uppercase; }
+.signup-sheet input { width: 100%; padding: .7rem 0; border: 0; border-bottom: 1px solid var(--ink); outline: 0; background: transparent; }
+.signup-sheet form > button, .signup-success > button { width: 100%; margin-top: .5rem; }
+.hand-note { margin: 1.4rem 0 -1.3rem; color: var(--wine); font: 1.25rem "Reenie Beanie", cursive; text-align: center; transform: rotate(-2deg); }
+.signup-success p { color: #6d5e52; }
+.signup-success > button { margin-top: 1rem; }
+.signup-overlay--fabric-portal .signup-sheet { background: #f5c78f; transform: rotate(1.5deg); }
+.signup-overlay--fabric-portal .signup-sheet::after { position: absolute; right: -1.8rem; bottom: 2rem; width: 4rem; height: 4rem; border: 1px dashed var(--wine); border-radius: 50%; content: "TS"; display: grid; place-items: center; color: var(--wine); font: 1.1rem "Gloock", serif; transform: rotate(-9deg); }
+.signup-overlay--paper-label .signup-sheet { box-shadow: 10px 12px 0 var(--orange), 0 28px 100px rgba(29,11,8,.42); }
+.signup-overlay--after-dark .signup-sheet { color: #f8ecda; background: #30201e; }
+.signup-overlay--after-dark .signup-sheet::before { border-color: rgba(239,152,68,.45); }
+.signup-overlay--after-dark .signup-copy, .signup-overlay--after-dark .signup-success p { color: #d6bdad; }
+.signup-overlay--after-dark .signup-sheet input { color: white; border-color: #d6bdad; }
+.signup-overlay--after-dark .signup-sheet form > button, .signup-overlay--after-dark .signup-success > button { color: var(--ink); border-color: var(--apricot); background: var(--apricot); }
+
+/* Set 02 — crumpled paper study in apricot, coffee, and black */
+.landing--set-paper-study { color: #171311; background: #d99a7c url("/assets/paper-apricot.png") center/cover; }
+.landing--set-paper-study::before { position: absolute; inset: 0; content: ""; background: linear-gradient(112deg, rgba(232,174,139,.62), transparent 42%, rgba(50,28,22,.12)); }
+.landing--set-paper-study .paper-grain { opacity: .15; }
+.landing--set-paper-study .landing-header { border-color: rgba(23,19,17,.45); }
+.landing--set-paper-study .landing-copy { padding-top: clamp(4.2rem,9vh,7rem); }
+.landing--set-paper-study .reveal-logo { width: min(51rem,79vw); padding: clamp(1.4rem,3vw,2.5rem); }
+.landing--set-paper-study .reveal-logo::before { inset: 3% -1%; border: 2px solid #1b1714; background: #d8a17f url("/assets/paper-coffee-grid.png") center/cover; box-shadow: 13px 15px 0 rgba(26,18,15,.82); clip-path: polygon(1% 5%,97% 0,100% 93%,94% 100%,2% 96%); transform: rotate(-1.5deg); }
+.landing--set-paper-study .landing-copy h1 em { color: #4f3027; }
+.landing--set-paper-study .landing-copy > p:not(.kicker) { color: #2e211d; }
+.landing--set-paper-study .primary-action { border-color: #161210; background: #161210; }
+.landing--set-paper-study .landing-swatch { border: 1px solid #241b17; background: #e2b08f; }
+.landing--set-paper-study .landing-swatch--one { top: 18%; left: 3%; width: clamp(8rem,13vw,12rem); height: clamp(12rem,20vw,18rem); filter: saturate(.35) sepia(.2); }
+.landing--set-paper-study .landing-swatch--two { top: auto; right: 4%; bottom: 13%; filter: saturate(.35) sepia(.3); }
+.landing--set-paper-study .landing-swatch--three { display: none; }
+.landing--set-paper-study .landing-stamp { bottom: 12%; left: 16%; color: #171311; border-color: #171311; }
+.landing--set-paper-study .landing-stamp::before { border-color: #171311; }
+.landing--set-paper-study .landing-note { top: 22%; right: 15%; left: auto; color: #171311; }
+.landing--set-paper-study .set-collage__paper { top: 10%; right: -4%; width: 29%; height: 28%; background-image: url("/assets/paper-black-grid.png"); clip-path: polygon(6% 0,100% 7%,95% 100%,0 88%); transform: rotate(5deg); }
+.landing--set-paper-study .set-collage__fabric { bottom: -5%; left: -3%; width: 30%; height: 28%; background: #5b392d url("/assets/paper-coffee-grid.png") center/cover; clip-path: polygon(0 10%,94% 0,100% 89%,7% 100%); transform: rotate(-4deg); }
+.landing--set-paper-study .set-collage__tape { top: 14%; right: 18%; width: 5.5rem; height: 1.3rem; background: rgba(235,197,135,.72); transform: rotate(-13deg); }
+.landing--set-paper-study .set-collage i { right: 8%; bottom: 7%; color: #171311; transform: rotate(-6deg); }
+.signup-overlay--set-paper-study .signup-backdrop { background: rgba(25,16,13,.78); }
+.signup-overlay--set-paper-study .signup-sheet { color: #171311; background: #d9a180 url("/assets/paper-apricot.png") center/cover; box-shadow: 11px 13px 0 #171311, 0 28px 100px rgba(20,10,7,.48); }
+.signup-overlay--set-paper-study .signup-sheet::before { border-color: rgba(23,19,17,.5); }
+.signup-overlay--set-paper-study .signup-copy, .signup-overlay--set-paper-study .signup-success p { color: #4d382f; }
+.signup-overlay--set-paper-study .signup-sheet input { color: #171311; border-color: #171311; }
+.signup-overlay--set-paper-study .signup-sheet form > button, .signup-overlay--set-paper-study .signup-success > button { color: #f4d0b4; border-color: #171311; background: #171311; }
+
+/* Set 03 — paper texture fused with the original fabric workroom */
+.landing--set-cloth-paper { color: #f6dfca; background: #120f0e url("/assets/paper-black-grid.png") center/cover; }
+.landing--set-cloth-paper::before { position: absolute; inset: 0; content: ""; background: linear-gradient(90deg, rgba(16,12,11,.24), rgba(16,12,11,.68) 50%, rgba(16,12,11,.24)); }
+.landing--set-cloth-paper .landing-header { border-color: rgba(246,223,202,.3); }
+.landing--set-cloth-paper .reveal-logo { width: min(50rem,75vw); }
+.landing--set-cloth-paper .reveal-logo::before { inset: 3% 0; border: 1px solid rgba(239,184,145,.7); background: rgba(33,22,19,.78) url("/assets/paper-wine-grid.png") center/cover; box-shadow: 12px 14px 0 #d39a79, 0 30px 90px rgba(0,0,0,.5); transform: rotate(1deg); }
+.landing--set-cloth-paper .landing-copy h1 em { color: #e4a981; }
+.landing--set-cloth-paper .landing-copy > p:not(.kicker) { color: #dcc0ac; }
+.landing--set-cloth-paper .primary-action { color: #171311; border-color: #dda27e; background: #dda27e; }
+.landing--set-cloth-paper .landing-swatch { border: 1px solid rgba(246,223,202,.65); background: #211917; }
+.landing--set-cloth-paper .landing-swatch--one { top: 17%; left: 3%; width: clamp(8rem,14vw,13rem); height: clamp(13rem,22vw,20rem); transform: rotate(-6deg); }
+.landing--set-cloth-paper .landing-swatch--two { top: 19%; right: 3%; width: clamp(7rem,12vw,11rem); transform: rotate(7deg); }
+.landing--set-cloth-paper .landing-swatch--three { display: block; right: 10%; bottom: 8%; }
+.landing--set-cloth-paper .landing-stamp { left: 6%; color: #e4a981; border-color: #e4a981; }
+.landing--set-cloth-paper .landing-stamp::before { border-color: #e4a981; }
+.landing--set-cloth-paper .landing-note { top: auto; right: auto; bottom: 15%; left: 18%; color: #e4a981; }
+.landing--set-cloth-paper .set-collage__paper { top: 11%; left: -3%; width: 29%; height: 27%; background-image: url("/assets/paper-apricot.png"); clip-path: polygon(0 3%,96% 0,100% 89%,8% 100%); opacity: .88; transform: rotate(-5deg); }
+.landing--set-cloth-paper .set-collage__fabric { right: -4%; bottom: -5%; width: 31%; height: 35%; background-image: url("/assets/fabric-red-weave.png"); clip-path: polygon(5% 0,100% 8%,100% 100%,0 91%); filter: brightness(.6) saturate(.65); transform: rotate(4deg); }
+.landing--set-cloth-paper .set-collage__tape { top: 16%; left: 17%; width: 6rem; height: 1.4rem; background: rgba(227,182,112,.76); transform: rotate(10deg); }
+.landing--set-cloth-paper .set-collage i { right: 7%; bottom: 7%; color: #e4a981; transform: rotate(5deg); }
+.signup-overlay--set-cloth-paper .signup-backdrop { background: rgba(8,6,5,.82); }
+.signup-overlay--set-cloth-paper .signup-sheet { color: #f6dfca; background: #211816 url("/assets/paper-black-grid.png") center/cover; box-shadow: 10px 12px 0 #d69e7d, 0 28px 100px rgba(0,0,0,.6); }
+.signup-overlay--set-cloth-paper .signup-sheet::before { border-color: rgba(230,171,133,.55); }
+.signup-overlay--set-cloth-paper .signup-copy, .signup-overlay--set-cloth-paper .signup-success p { color: #d4b7a3; }
+.signup-overlay--set-cloth-paper .signup-sheet input { color: #f6dfca; border-color: #d4b7a3; }
+.signup-overlay--set-cloth-paper .signup-sheet form > button, .signup-overlay--set-cloth-paper .signup-success > button { color: #171311; border-color: #d99f7d; background: #d99f7d; }
+
+/* Collection and wardrobe concepts */
+.collection { min-height: 100vh; padding-bottom: 8rem; overflow: hidden; background-color: var(--cream); background-image: radial-gradient(circle at 25% 20%, rgba(141,51,48,.08) 0 1px, transparent 1.5px), radial-gradient(circle at 70% 66%, rgba(255,255,255,.5) 0 1px, transparent 1.5px), repeating-linear-gradient(14deg, transparent 0 12px, rgba(77,40,26,.025) 13px); background-size: 10px 10px, 14px 14px, auto; }
+.collection-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: .9rem clamp(1rem,4vw,4rem); border-bottom: 1px solid var(--line); }
+.logo-button { width: fit-content; padding: 0; border: 0; background: transparent; }
+.collection-header p { font-size: .58rem; letter-spacing: .17em; text-transform: uppercase; }
+.circle-button { justify-self: end; border: 0; background: transparent; font-size: .67rem; }
+.circle-button span { display: inline-grid; width: 1.5rem; height: 1.5rem; margin-left: .4rem; place-items: center; border-radius: 50%; color: white; background: var(--wine); }
+.collection-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 3rem; max-width: 1320px; margin: 0 auto; padding: clamp(3rem,7vw,6rem) 2rem 2rem; }
+.collection-intro h1 { margin: .6rem 0 0; font: 400 clamp(3.3rem,7vw,7rem)/.9 "Gloock", serif; letter-spacing: -.055em; }
+.collection-intro > p { max-width: 29rem; margin: 0; color: #6f6358; font-family: "Gloock", serif; line-height: 1.6; }
+.wardrobe-stage { position: relative; max-width: 1400px; min-height: 690px; margin: 0 auto; padding: 2rem; isolation: isolate; transition: .5s ease; }
+.wardrobe-scraps { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.wardrobe-scrap { position: absolute; display: block; background-position: center; background-size: cover; box-shadow: 0 12px 30px rgba(67,32,19,.18); }
+.wardrobe-scrap--one { top: 0; left: 0; width: 12rem; height: 15rem; background-image: url("/assets/fabric-red-weave.png"); clip-path: polygon(4% 3%,96% 0,100% 94%,0 100%); transform: rotate(-8deg); }
+.wardrobe-scrap--two { top: 8%; right: 0; width: 10rem; height: 12rem; background-image: url("/assets/fabric-gold.png"); clip-path: polygon(0 5%,100% 0,94% 100%,5% 94%); transform: rotate(7deg); }
+.wardrobe-scrap--three { bottom: 1%; left: 7%; width: 9rem; height: 8rem; background-image: url("/assets/fabric-burgundy.png"); clip-path: polygon(5% 0,100% 7%,92% 100%,0 91%); transform: rotate(11deg); }
+.wardrobe-scraps > i { position: absolute; right: 5%; bottom: 2%; color: var(--wine); font: 1.8rem "Reenie Beanie", cursive; transform: rotate(-5deg); }
+.wardrobe-crown { display: flex; align-items: center; justify-content: center; gap: 1.2rem; width: min(42rem,70%); margin: 0 auto -2px; padding: 1rem 2rem .7rem; border: 3px solid var(--ink); border-bottom: 0; border-radius: 70% 70% 0 0 / 100% 100% 0 0; background: var(--blush); font: 1.5rem "Reenie Beanie", cursive; }
+.wardrobe-crown i { font: .8rem "DM Sans", sans-serif; }
+.wardrobe-shell { display: grid; grid-template-columns: 10% 1fr 10%; min-height: 610px; border: 3px solid var(--ink); border-radius: 2rem .8rem .5rem .5rem; background: var(--blush); box-shadow: 13px 16px 0 rgba(78,37,27,.15); }
+.wardrobe-door { position: relative; margin: 1rem 0; border: 2px solid var(--ink); background: #d28d81; }
+.wardrobe-door--left { margin-left: 1rem; border-radius: 1rem 0 0 1rem; }
+.wardrobe-door--right { margin-right: 1rem; border-radius: 0 1rem 1rem 0; }
+.wardrobe-door span { position: absolute; inset: 8%; border: 1px solid var(--ink); border-radius: 50% 50% 1rem 1rem; }
+.wardrobe-interior { position: relative; margin: 1rem 0; padding: 4rem 1rem 1rem; border-block: 2px solid var(--ink); background: repeating-linear-gradient(90deg, transparent 0 3rem, rgba(60,36,27,.045) 3.05rem 3.12rem), #f5dfd1; }
+.wardrobe-rail { position: absolute; top: 3.3rem; right: 3%; left: 3%; z-index: 2; height: .45rem; border: 2px solid var(--ink); border-radius: 1rem; background: #d6b46f; }
+.garment-grid { position: relative; z-index: 3; display: grid; grid-template-columns: repeat(4,1fr); min-height: 450px; }
+.garment { position: relative; display: flex; align-items: center; min-width: 0; padding: 0 .5rem 5.3rem; border: 0; background: transparent; flex-direction: column; transition: transform .25s ease; }
+.garment:hover { transform: translateY(-.6rem) rotate(1deg); }
+.garment:nth-child(even):hover { transform: translateY(-.6rem) rotate(-1deg); }
+.hanger-icon { width: min(100%,10rem); height: 5rem; overflow: visible; stroke: var(--ink); stroke-width: 2; }
+.garment-ghost { position: relative; display: grid; width: min(86%,10.5rem); height: 18rem; place-items: center; border: 1.5px dashed rgba(60,45,39,.55); color: #756960; background: rgba(255,250,240,.32); clip-path: polygon(26% 0,74% 0,96% 14%,84% 34%,78% 28%,88% 100%,12% 100%,22% 28%,16% 34%,4% 14%); }
+.garment--2 .garment-ghost { clip-path: polygon(23% 0,77% 0,90% 10%,77% 28%,70% 23%,84% 100%,16% 100%,30% 23%,23% 28%,10% 10%); }
+.garment--3 .garment-ghost { clip-path: polygon(30% 0,70% 0,98% 16%,86% 39%,74% 29%,77% 100%,23% 100%,26% 29%,14% 39%,2% 16%); }
+.garment--4 .garment-ghost { clip-path: polygon(24% 0,76% 0,94% 12%,80% 31%,74% 25%,93% 100%,7% 100%,26% 25%,20% 31%,6% 12%); }
+.ghost-seam { position: absolute; top: 12%; bottom: 10%; left: 50%; border-left: 1px dashed rgba(60,45,39,.25); }
+.garment-ghost b { font: .65rem/1.5 "DM Sans", sans-serif; letter-spacing: .13em; text-align: center; text-transform: uppercase; }
+.garment-label { position: absolute; right: .3rem; bottom: .8rem; left: .3rem; display: flex; align-items: center; gap: .6rem; padding: .65rem; border: 1px solid var(--ink); background: var(--paper); box-shadow: 3px 3px 0 var(--ink); text-align: left; transform: rotate(-1deg); }
+.garment:nth-child(even) .garment-label { transform: rotate(1deg); }
+.garment-label > i { width: 2rem; height: 2rem; flex: 0 0 auto; border-radius: 50%; background-position: center; background-size: cover; }
+.garment-label span { min-width: 0; flex: 1; }
+.garment-label strong, .garment-label small { display: block; }
+.garment-label strong { font: .75rem "Gloock", serif; }
+.garment-label small { margin-top: .2rem; overflow: hidden; color: #786a5f; font-size: .48rem; text-overflow: ellipsis; white-space: nowrap; }
+.garment-label > b { font-size: .5rem; font-weight: 500; text-transform: uppercase; }
+.wardrobe-caption { margin: .8rem 0 0; font: 1.25rem "Reenie Beanie", cursive; text-align: center; }
+
+/* 01 — a hand-drawn armoire cut from warm paper and fabric */
+.collection--scrapbook-armoire { background-color: #f2c995; }
+.collection--scrapbook-armoire .wardrobe-stage { padding: 3.5rem 4rem; background: rgba(255,250,240,.5); clip-path: polygon(1% 3%,98% 0,100% 94%,96% 100%,2% 97%,0 9%); }
+.collection--scrapbook-armoire .wardrobe-crown { color: var(--paper); border-color: var(--wine); background: var(--wine); box-shadow: 5px 0 0 var(--orange); }
+.collection--scrapbook-armoire .wardrobe-shell { border-color: var(--wine); background: var(--orange); box-shadow: 13px 16px 0 rgba(141,51,48,.24); }
+.collection--scrapbook-armoire .wardrobe-door { border-color: var(--wine); background: var(--apricot); }
+.collection--scrapbook-armoire .wardrobe-door--right { background: #dc7042; }
+.collection--scrapbook-armoire .wardrobe-door span { border-color: var(--wine); }
+.collection--scrapbook-armoire .wardrobe-interior { border-color: var(--wine); background: repeating-linear-gradient(90deg, transparent 0 3rem, rgba(141,51,48,.05) 3.05rem 3.12rem), var(--cream); }
+.collection--scrapbook-armoire .wardrobe-rail { border-color: var(--wine); background: var(--apricot); }
+
+/* 02 — a gradient pinboard of individually torn garment cards */
+.collection--swatch-wall { background-color: var(--orange); background-image: radial-gradient(circle at 25% 20%, rgba(255,255,255,.12) 0 1px, transparent 1.5px), linear-gradient(135deg,#efb779,#ef9844 45%,#d85e25 72%,#8d3330); background-size: 10px 10px, auto; }
+.collection--swatch-wall .wardrobe-stage { max-width: 1280px; padding: 3rem; }
+.collection--swatch-wall .wardrobe-crown, .collection--swatch-wall .wardrobe-door, .collection--swatch-wall .wardrobe-rail { display: none; }
+.collection--swatch-wall .wardrobe-shell { display: block; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.collection--swatch-wall .wardrobe-interior { min-height: 590px; margin: 0; padding: 2.5rem; border: 0; background: rgba(255,250,240,.28); clip-path: polygon(1% 2%,99% 0,97% 98%,3% 100%,0 51%); }
+.collection--swatch-wall .garment-grid { gap: 1.2rem; }
+.collection--swatch-wall .garment { min-height: 500px; padding: 1.2rem .8rem 5.3rem; background: var(--paper); box-shadow: 7px 9px 0 rgba(111,43,33,.2); clip-path: polygon(2% 1%,98% 0,100% 96%,93% 100%,0 98%); transform: rotate(-2deg); }
+.collection--swatch-wall .garment:nth-child(even) { transform: translateY(1.5rem) rotate(2deg); }
+.collection--swatch-wall .garment:hover { transform: translateY(-.4rem) rotate(0); }
+.collection--swatch-wall .garment::before { position: absolute; top: -.25rem; left: calc(50% - 1.6rem); width: 3.2rem; height: 1rem; content: ""; background: rgba(224,190,132,.72); transform: rotate(3deg); }
+.collection--swatch-wall .wardrobe-caption { margin-top: 2.5rem; }
+.collection--swatch-wall .wardrobe-scrap--one { top: 12%; left: -2%; }
+.collection--swatch-wall .wardrobe-scrap--two { top: 0; right: -2%; }
+
+/* 03 — a deep-red paper closet with bold editorial compartments */
+.collection--paper-closet { color: #f8ecda; background-color: var(--wine); background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,.07) 0 1px, transparent 1.5px), repeating-linear-gradient(-9deg, transparent 0 15px, rgba(28,8,8,.035) 16px); background-size: 11px 11px, auto; }
+.collection--paper-closet .brand-logo { filter: invert(1); mix-blend-mode: screen; }
+.collection--paper-closet .collection-header { border-color: rgba(255,255,255,.25); }
+.collection--paper-closet .circle-button span { color: var(--wine); background: var(--apricot); }
+.collection--paper-closet .collection-intro > p { color: #e5c5b8; }
+.collection--paper-closet .wardrobe-stage { max-width: 1250px; padding: 4rem; background: var(--cream); clip-path: polygon(2% 0,100% 3%,97% 100%,0 96%); }
+.collection--paper-closet .wardrobe-crown, .collection--paper-closet .wardrobe-door, .collection--paper-closet .wardrobe-rail { display: none; }
+.collection--paper-closet .wardrobe-shell { display: block; min-height: 0; border: 0; background: transparent; box-shadow: none; }
+.collection--paper-closet .wardrobe-interior { margin: 0; padding: 0; border: 0; background: transparent; }
+.collection--paper-closet .garment-grid { grid-template-columns: repeat(2,1fr); gap: 1.2rem; }
+.collection--paper-closet .garment { min-height: 380px; padding: 1rem 1rem 4.8rem; border: 1px solid var(--wine); background: #efb778; }
+.collection--paper-closet .garment:nth-child(2) { background: var(--orange); }
+.collection--paper-closet .garment:nth-child(3) { background: #d97956; }
+.collection--paper-closet .garment:nth-child(4) { background: var(--apricot); }
+.collection--paper-closet .hanger-icon { height: 4rem; stroke: var(--wine); }
+.collection--paper-closet .garment-ghost { height: 13rem; color: var(--wine); border-color: rgba(141,51,48,.65); background: rgba(255,250,240,.28); }
+.collection--paper-closet .wardrobe-caption { color: var(--wine); }
+.collection--paper-closet .wardrobe-scraps > i { color: var(--apricot); }
+
+/* Set 02 wardrobe — a black-trimmed cabinet cut from apricot paper */
+.collection--set-paper-study { color: #171311; background: #d69b7c url("/assets/paper-apricot.png") center/cover; }
+.collection--set-paper-study .brand-logo { filter: none; mix-blend-mode: multiply; }
+.collection--set-paper-study .collection-header { border-color: rgba(23,19,17,.45); }
+.collection--set-paper-study .collection-intro > p { color: #4c352d; }
+.collection--set-paper-study .circle-button span { color: #edc2a5; background: #171311; }
+.collection--set-paper-study .wardrobe-stage { max-width: 1320px; padding: 3.5rem 4rem; background: rgba(224,171,139,.58) url("/assets/paper-coffee-grid.png") center/cover; clip-path: polygon(1% 3%,98% 0,100% 95%,95% 100%,2% 97%,0 8%); }
+.collection--set-paper-study .wardrobe-crown { display: flex; color: #ecc3a8; border-color: #171311; background: #171311; box-shadow: 7px 0 0 #6b4134; }
+.collection--set-paper-study .wardrobe-shell { display: grid; grid-template-columns: 10% 1fr 10%; min-height: 610px; border: 3px solid #171311; border-radius: 2rem .8rem .5rem .5rem; background: #654034; box-shadow: 14px 17px 0 rgba(23,19,17,.45); }
+.collection--set-paper-study .wardrobe-door { display: block; margin-block: 1rem; border-color: #171311; background: #b87760 url("/assets/paper-coffee-grid.png") center/cover; }
+.collection--set-paper-study .wardrobe-door--left { margin-left: 1rem; }
+.collection--set-paper-study .wardrobe-door--right { margin-right: 1rem; }
+.collection--set-paper-study .wardrobe-door span { border-color: #171311; }
+.collection--set-paper-study .wardrobe-interior { min-height: 0; margin: 1rem 0; padding: 4rem 1rem 1rem; border-block: 2px solid #171311; background: repeating-linear-gradient(90deg, transparent 0 3rem, rgba(23,19,17,.05) 3.05rem 3.12rem), #e5b393; clip-path: none; }
+.collection--set-paper-study .wardrobe-rail { display: block; border-color: #171311; background: #7a4a3a; }
+.collection--set-paper-study .garment-grid { grid-template-columns: repeat(4,1fr); gap: 0; }
+.collection--set-paper-study .garment, .collection--set-paper-study .garment:nth-child(2), .collection--set-paper-study .garment:nth-child(3), .collection--set-paper-study .garment:nth-child(4) { min-height: 0; padding: 0 .5rem 5.3rem; border: 0; background: transparent; box-shadow: none; clip-path: none; transform: none; }
+.collection--set-paper-study .garment:hover { transform: translateY(-.6rem) rotate(1deg); }
+.collection--set-paper-study .hanger-icon { height: 5rem; stroke: #171311; }
+.collection--set-paper-study .garment-ghost { height: 18rem; color: #49332b; border-color: rgba(23,19,17,.58); background: rgba(232,190,162,.42); }
+.collection--set-paper-study .garment-label { border-color: #171311; background: #e8b99b; box-shadow: 3px 3px 0 #171311; }
+.collection--set-paper-study .wardrobe-caption { color: #171311; }
+.collection--set-paper-study .wardrobe-scrap--one { background-image: url("/assets/paper-black-grid.png"); }
+.collection--set-paper-study .wardrobe-scrap--two { background-image: url("/assets/paper-apricot.png"); }
+.collection--set-paper-study .wardrobe-scrap--three { background-image: url("/assets/paper-coffee-grid.png"); }
+.collection--set-paper-study .wardrobe-scraps > i { color: #171311; }
+
+/* Set 03 wardrobe — the same cabinet dressed as a fabric cutting room */
+.collection--set-cloth-paper { color: #f4ddc9; background: #130f0e url("/assets/paper-black-grid.png") center/cover; }
+.collection--set-cloth-paper .brand-logo { filter: invert(1); mix-blend-mode: screen; }
+.collection--set-cloth-paper .collection-header { border-color: rgba(244,221,201,.28); }
+.collection--set-cloth-paper .collection-intro > p { color: #d4b6a2; }
+.collection--set-cloth-paper .circle-button span { color: #171311; background: #dda27e; }
+.collection--set-cloth-paper .wardrobe-stage { max-width: 1320px; padding: 3.5rem 4rem; background: rgba(93,53,43,.72) url("/assets/paper-wine-grid.png") center/cover; clip-path: polygon(1% 3%,98% 0,100% 95%,95% 100%,2% 97%,0 8%); }
+.collection--set-cloth-paper .wardrobe-crown { display: flex; color: #1a1412; border-color: #d99f7d; background: #d99f7d; box-shadow: 7px 0 0 #f0c5a9; }
+.collection--set-cloth-paper .wardrobe-shell { display: grid; grid-template-columns: 10% 1fr 10%; min-height: 610px; border: 3px solid #d99f7d; border-radius: 2rem .8rem .5rem .5rem; background: #211816 url("/assets/fabric-burgundy.png") center/cover; box-shadow: 14px 17px 0 rgba(0,0,0,.55); }
+.collection--set-cloth-paper .wardrobe-door { display: block; margin-block: 1rem; border-color: #d99f7d; background: #1d1715 url("/assets/fabric-black-knit.png") center/cover; }
+.collection--set-cloth-paper .wardrobe-door--left { margin-left: 1rem; }
+.collection--set-cloth-paper .wardrobe-door--right { margin-right: 1rem; background-image: url("/assets/fabric-charcoal.png"); }
+.collection--set-cloth-paper .wardrobe-door span { border-color: #d99f7d; }
+.collection--set-cloth-paper .wardrobe-interior { min-height: 0; margin: 1rem 0; padding: 4rem 1rem 1rem; border-block: 2px solid #d99f7d; background: linear-gradient(rgba(229,176,143,.88),rgba(229,176,143,.88)), url("/assets/paper-apricot.png") center/cover; clip-path: none; }
+.collection--set-cloth-paper .wardrobe-rail { display: block; border-color: #1b1513; background: #d4a06e; }
+.collection--set-cloth-paper .garment-grid { grid-template-columns: repeat(4,1fr); gap: 0; }
+.collection--set-cloth-paper .garment, .collection--set-cloth-paper .garment:nth-child(2), .collection--set-cloth-paper .garment:nth-child(3), .collection--set-cloth-paper .garment:nth-child(4) { min-height: 0; padding: 0 .5rem 5.3rem; border: 0; background: transparent; box-shadow: none; clip-path: none; transform: none; }
+.collection--set-cloth-paper .garment:hover { transform: translateY(-.6rem) rotate(-1deg); }
+.collection--set-cloth-paper .hanger-icon { height: 5rem; stroke: #1b1513; }
+.collection--set-cloth-paper .garment-ghost { height: 18rem; color: #594036; border-color: rgba(27,21,19,.58); background: rgba(248,222,202,.25); }
+.collection--set-cloth-paper .garment-label { color: #1b1513; border-color: #1b1513; background: #efc5aa; box-shadow: 3px 3px 0 #1b1513; }
+.collection--set-cloth-paper .wardrobe-caption { color: #1b1513; }
+.collection--set-cloth-paper .wardrobe-scrap--one { background-image: url("/assets/fabric-red-weave.png"); }
+.collection--set-cloth-paper .wardrobe-scrap--two { background-image: url("/assets/fabric-gold.png"); filter: sepia(.35) saturate(.6); }
+.collection--set-cloth-paper .wardrobe-scrap--three { background-image: url("/assets/fabric-black-knit.png"); }
+.collection--set-cloth-paper .wardrobe-scraps > i { color: #e7b18e; }
+
+@keyframes sheet-in { from { opacity: 0; transform: translateY(3rem) rotate(2deg); } }
+
+@media (max-width: 900px) {
+  .landing-swatch--three, .landing-note { display: none; }
+  .landing-swatch--one { top: 18%; left: -2rem; opacity: .65; }
+  .landing-swatch--two { top: 24%; right: -2rem; opacity: .65; }
+  .landing--after-dark .landing-swatch--one { right: -4rem; width: 13rem; opacity: .45; }
+  .collection-intro { align-items: flex-start; flex-direction: column; }
+  .wardrobe-shell { grid-template-columns: 6% 1fr 6%; }
+  .garment-grid { grid-template-columns: repeat(2,1fr); }
+  .wardrobe-interior { padding-inline: .5rem; }
+  .collection--swatch-wall .garment-grid { gap: .8rem; }
+  .collection--swatch-wall .garment:nth-child(even) { transform: rotate(2deg); }
+  .collection--set-paper-study .wardrobe-shell, .collection--set-cloth-paper .wardrobe-shell { grid-template-columns: 6% 1fr 6%; }
+  .collection--set-paper-study .garment-grid, .collection--set-cloth-paper .garment-grid { grid-template-columns: repeat(2,1fr); }
+}
+
+@media (max-width: 620px) {
+  .landing-header span, .collection-header > p { display: none; }
+  .collection-header .brand-logo { width: 7.5rem; height: 3.2rem; }
+  .landing-copy { padding-top: 7rem; }
+  .reveal-logo { width: 94vw; padding: .7rem; }
+  .reveal-logo .brand-logo { height: 8.5rem; }
+  .landing-copy h1 { font-size: 1.25rem; }
+  .landing-actions { flex-direction: column; gap: .5rem; }
+  .landing-stamp { bottom: 15%; left: 4%; transform: scale(.75) rotate(-12deg); }
+  .fabric-swatch { display: none; }
+  .concept-picker { right: .6rem; bottom: .6rem; width: calc(100vw - 1.2rem); }
+  .concept-picker button { min-height: 3rem; padding: .4rem; }
+  .concept-picker button span { font-size: .57rem; }
+  .concept-picker button i { display: none; }
+  .set-picker { bottom: 4.8rem; left: .6rem; width: calc(100vw - 1.2rem); }
+  .landing--set-paper-study .set-picker, .landing--set-cloth-paper .set-picker, .collection--set-paper-study .set-picker, .collection--set-cloth-paper .set-picker { bottom: .6rem; }
+  .set-picker button { min-height: 3rem; padding: .4rem; }
+  .set-picker button span { font-size: .56rem; }
+  .set-picker button i { display: none; }
+  .signup-swatch { display: none; }
+  .collection-header { grid-template-columns: 1fr 1fr; }
+  .collection-intro { padding-inline: 1rem; }
+  .wardrobe-stage { padding: 1rem .45rem; }
+  .wardrobe-crown { width: 76%; font-size: 1.1rem; }
+  .wardrobe-shell { display: block; border-radius: .8rem; }
+  .wardrobe-door { display: none; }
+  .wardrobe-interior { margin: .7rem; border: 1px solid var(--ink); }
+  .garment-grid { grid-template-columns: 1fr 1fr; }
+  .garment { padding-inline: .15rem; }
+  .garment-ghost { height: 13rem; }
+  .garment-label { padding: .45rem; }
+  .garment-label > i, .garment-label > b { display: none; }
+  .collection--paper-closet .wardrobe-stage { padding: 1.5rem .8rem; }
+  .collection--paper-closet .garment { min-height: 350px; }
+  .collection--set-paper-study .wardrobe-stage, .collection--set-cloth-paper .wardrobe-stage { padding: 1.5rem .8rem; }
+  .collection--set-paper-study .wardrobe-shell, .collection--set-cloth-paper .wardrobe-shell { display: block; border-radius: .8rem; }
+  .collection--set-paper-study .wardrobe-door, .collection--set-cloth-paper .wardrobe-door { display: none; }
+  .collection--set-paper-study .wardrobe-interior, .collection--set-cloth-paper .wardrobe-interior { margin: .7rem; border: 1px solid currentColor; }
+  .collection--set-paper-study .garment-grid, .collection--set-cloth-paper .garment-grid { grid-template-columns: 1fr 1fr; }
+  .collection--set-paper-study .garment-ghost, .collection--set-cloth-paper .garment-ghost { height: 13rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* Tamarind material studies — additive overrides, leaving all original sets intact. */
+.set-picker { width: min(31rem, calc(100vw - 2rem)); max-height: min(43vh, 23rem); overflow-y: auto; overscroll-behavior: contain; }
+.set-picker > div { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.set-picker button { min-height: 3.15rem; }
+.set-picker button span { overflow-wrap: anywhere; }
+.landing[class*="landing--set-"]:not(.landing--set-original) .set-collage__paper,
+.collection[class*="collection--set-"]:not(.collection--set-original) .wardrobe-scrap { background-size: cover; }
+
+/* apricot-archive */
+.landing--set-apricot-archive, .collection--set-apricot-archive { --ink: #211715; --wine: #3a2420; --orange: #f0c4a3; --paper: #f0c4a3; color: #211715; background: #b47d6e url('/assets/paper-apricot.png') center / cover fixed; }
+.landing--set-apricot-archive .reveal-logo::before { background: #f0c4a3 url('/assets/paper-coffee-grid.png') center / cover; border: 1px solid #3a2420; box-shadow: 12px 14px 0 #3a2420, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-apricot-archive .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-apricot-archive .landing-copy h1 em { color: #211715; text-decoration: underline; text-decoration-color: #f0c4a3; text-underline-offset: .15em; }
+.landing--set-apricot-archive .primary-action { background: #3a2420; border-color: #f0c4a3; color: #fff0df; }
+.landing--set-apricot-archive .landing-swatch { background: #f0c4a3; border: 1px solid #3a2420; }
+.landing--set-apricot-archive .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #3a2420; }
+.landing--set-apricot-archive .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-apricot-archive .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-apricot-archive .set-collage i { right: 7%; bottom: 10%; color: #211715; transform: rotate(-7deg); }
+.collection--set-apricot-archive .wardrobe-stage { background: #b47d6e url('/assets/paper-apricot.png') center/cover; }
+.collection--set-apricot-archive .collection-header, .collection--set-apricot-archive .collection-intro { color: #211715; }
+.signup-overlay--set-apricot-archive .signup-sheet { background: #f0c4a3 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #3a2420; }
+
+/* coffee-ledger */
+.landing--set-coffee-ledger, .collection--set-coffee-ledger { --ink: #f4d5b9; --wine: #261817; --orange: #d1a38b; --paper: #d1a38b; color: #f4d5b9; background: #62413b url('/assets/paper-coffee-grid.png') center / cover fixed; }
+.landing--set-coffee-ledger .reveal-logo::before { background: #d1a38b url('/assets/paper-apricot.png') center / cover; border: 1px solid #261817; box-shadow: 12px 14px 0 #261817, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-coffee-ledger .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-coffee-ledger .landing-copy h1 em { color: #f4d5b9; text-decoration: underline; text-decoration-color: #d1a38b; text-underline-offset: .15em; }
+.landing--set-coffee-ledger .primary-action { background: #261817; border-color: #d1a38b; color: #fff0df; }
+.landing--set-coffee-ledger .landing-swatch { background: #d1a38b; border: 1px solid #261817; }
+.landing--set-coffee-ledger .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-black-grid.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #261817; }
+.landing--set-coffee-ledger .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-coffee-ledger .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-coffee-ledger .set-collage i { right: 7%; bottom: 10%; color: #f4d5b9; transform: rotate(-7deg); }
+.collection--set-coffee-ledger .wardrobe-stage { background: #62413b url('/assets/paper-coffee-grid.png') center/cover; }
+.collection--set-coffee-ledger .collection-header, .collection--set-coffee-ledger .collection-intro { color: #f4d5b9; }
+.signup-overlay--set-coffee-ledger .signup-sheet { background: #d1a38b url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #261817; }
+
+/* black-atelier */
+.landing--set-black-atelier, .collection--set-black-atelier { --ink: #f3d7bd; --wine: #130e0e; --orange: #ad7866; --paper: #ad7866; color: #f3d7bd; background: #191414 url('/assets/paper-black-grid.png') center / cover fixed; }
+.landing--set-black-atelier .reveal-logo::before { background: #ad7866 url('/assets/paper-apricot.png') center / cover; border: 1px solid #130e0e; box-shadow: 12px 14px 0 #130e0e, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-black-atelier .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-black-atelier .landing-copy h1 em { color: #f3d7bd; text-decoration: underline; text-decoration-color: #ad7866; text-underline-offset: .15em; }
+.landing--set-black-atelier .primary-action { background: #130e0e; border-color: #ad7866; color: #fff0df; }
+.landing--set-black-atelier .landing-swatch { background: #ad7866; border: 1px solid #130e0e; }
+.landing--set-black-atelier .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-apricot.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #130e0e; }
+.landing--set-black-atelier .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-black-atelier .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-black-atelier .set-collage i { right: 7%; bottom: 10%; color: #f3d7bd; transform: rotate(-7deg); }
+.collection--set-black-atelier .wardrobe-stage { background: #191414 url('/assets/paper-black-grid.png') center/cover; }
+.collection--set-black-atelier .collection-header, .collection--set-black-atelier .collection-intro { color: #f3d7bd; }
+.signup-overlay--set-black-atelier .signup-sheet { background: #ad7866 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #130e0e; }
+
+/* wine-notebook */
+.landing--set-wine-notebook, .collection--set-wine-notebook { --ink: #f8dfcb; --wine: #27171a; --orange: #b78078; --paper: #b78078; color: #f8dfcb; background: #633038 url('/assets/paper-wine-grid.png') center / cover fixed; }
+.landing--set-wine-notebook .reveal-logo::before { background: #b78078 url('/assets/paper-apricot.png') center / cover; border: 1px solid #27171a; box-shadow: 12px 14px 0 #27171a, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-wine-notebook .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-wine-notebook .landing-copy h1 em { color: #f8dfcb; text-decoration: underline; text-decoration-color: #b78078; text-underline-offset: .15em; }
+.landing--set-wine-notebook .primary-action { background: #27171a; border-color: #b78078; color: #fff0df; }
+.landing--set-wine-notebook .landing-swatch { background: #b78078; border: 1px solid #27171a; }
+.landing--set-wine-notebook .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-apricot.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #27171a; }
+.landing--set-wine-notebook .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-wine-notebook .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-wine-notebook .set-collage i { right: 7%; bottom: 10%; color: #f8dfcb; transform: rotate(-7deg); }
+.collection--set-wine-notebook .wardrobe-stage { background: #633038 url('/assets/paper-wine-grid.png') center/cover; }
+.collection--set-wine-notebook .collection-header, .collection--set-wine-notebook .collection-intro { color: #f8dfcb; }
+.signup-overlay--set-wine-notebook .signup-sheet { background: #b78078 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #27171a; }
+
+/* tailors-table */
+.landing--set-tailors-table, .collection--set-tailors-table { --ink: #f7e0bd; --wine: #241816; --orange: #d2a07b; --paper: #d2a07b; color: #f7e0bd; background: #70483b url('/assets/paper-coffee-grid.png') center / cover fixed; }
+.landing--set-tailors-table .reveal-logo::before { background: #d2a07b url('/assets/paper-apricot.png') center / cover; border: 1px solid #241816; box-shadow: 12px 14px 0 #241816, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-tailors-table .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-tailors-table .landing-copy h1 em { color: #f7e0bd; text-decoration: underline; text-decoration-color: #d2a07b; text-underline-offset: .15em; }
+.landing--set-tailors-table .primary-action { background: #241816; border-color: #d2a07b; color: #fff0df; }
+.landing--set-tailors-table .landing-swatch { background: #d2a07b; border: 1px solid #241816; }
+.landing--set-tailors-table .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/fabric-red-weave.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #241816; }
+.landing--set-tailors-table .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-red-weave.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-tailors-table .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-tailors-table .set-collage i { right: 7%; bottom: 10%; color: #f7e0bd; transform: rotate(-7deg); }
+.collection--set-tailors-table .wardrobe-stage { background: #70483b url('/assets/paper-coffee-grid.png') center/cover; }
+.collection--set-tailors-table .collection-header, .collection--set-tailors-table .collection-intro { color: #f7e0bd; }
+.signup-overlay--set-tailors-table .signup-sheet { background: #d2a07b url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #241816; }
+
+/* blush-scrapbook */
+.landing--set-blush-scrapbook, .collection--set-blush-scrapbook { --ink: #271b1b; --wine: #4b2d30; --orange: #f6d8c7; --paper: #f6d8c7; color: #271b1b; background: #d1a49f url('/assets/paper-apricot.png') center / cover fixed; }
+.landing--set-blush-scrapbook .reveal-logo::before { background: #f6d8c7 url('/assets/paper-coffee-grid.png') center / cover; border: 1px solid #4b2d30; box-shadow: 12px 14px 0 #4b2d30, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-blush-scrapbook .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-blush-scrapbook .landing-copy h1 em { color: #271b1b; text-decoration: underline; text-decoration-color: #f6d8c7; text-underline-offset: .15em; }
+.landing--set-blush-scrapbook .primary-action { background: #4b2d30; border-color: #f6d8c7; color: #fff0df; }
+.landing--set-blush-scrapbook .landing-swatch { background: #f6d8c7; border: 1px solid #4b2d30; }
+.landing--set-blush-scrapbook .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-wine-grid.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #4b2d30; }
+.landing--set-blush-scrapbook .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-red-weave.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-blush-scrapbook .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-blush-scrapbook .set-collage i { right: 7%; bottom: 10%; color: #271b1b; transform: rotate(-7deg); }
+.collection--set-blush-scrapbook .wardrobe-stage { background: #d1a49f url('/assets/paper-apricot.png') center/cover; }
+.collection--set-blush-scrapbook .collection-header, .collection--set-blush-scrapbook .collection-intro { color: #271b1b; }
+.signup-overlay--set-blush-scrapbook .signup-sheet { background: #f6d8c7 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #4b2d30; }
+
+/* ink-grid */
+.landing--set-ink-grid, .collection--set-ink-grid { --ink: #f0c9a7; --wine: #0e0b0d; --orange: #a7716d; --paper: #a7716d; color: #f0c9a7; background: #201a1b url('/assets/paper-black-grid.png') center / cover fixed; }
+.landing--set-ink-grid .reveal-logo::before { background: #a7716d url('/assets/paper-apricot.png') center / cover; border: 1px solid #0e0b0d; box-shadow: 12px 14px 0 #0e0b0d, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-ink-grid .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-ink-grid .landing-copy h1 em { color: #f0c9a7; text-decoration: underline; text-decoration-color: #a7716d; text-underline-offset: .15em; }
+.landing--set-ink-grid .primary-action { background: #0e0b0d; border-color: #a7716d; color: #fff0df; }
+.landing--set-ink-grid .landing-swatch { background: #a7716d; border: 1px solid #0e0b0d; }
+.landing--set-ink-grid .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #0e0b0d; }
+.landing--set-ink-grid .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-ink-grid .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-ink-grid .set-collage i { right: 7%; bottom: 10%; color: #f0c9a7; transform: rotate(-7deg); }
+.collection--set-ink-grid .wardrobe-stage { background: #201a1b url('/assets/paper-black-grid.png') center/cover; }
+.collection--set-ink-grid .collection-header, .collection--set-ink-grid .collection-intro { color: #f0c9a7; }
+.signup-overlay--set-ink-grid .signup-sheet { background: #a7716d url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #0e0b0d; }
+
+/* rust-collage */
+.landing--set-rust-collage, .collection--set-rust-collage { --ink: #f4d7c3; --wine: #2b1716; --orange: #c48d72; --paper: #c48d72; color: #f4d7c3; background: #873f32 url('/assets/paper-wine-grid.png') center / cover fixed; }
+.landing--set-rust-collage .reveal-logo::before { background: #c48d72 url('/assets/paper-apricot.png') center / cover; border: 1px solid #2b1716; box-shadow: 12px 14px 0 #2b1716, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-rust-collage .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-rust-collage .landing-copy h1 em { color: #f4d7c3; text-decoration: underline; text-decoration-color: #c48d72; text-underline-offset: .15em; }
+.landing--set-rust-collage .primary-action { background: #2b1716; border-color: #c48d72; color: #fff0df; }
+.landing--set-rust-collage .landing-swatch { background: #c48d72; border: 1px solid #2b1716; }
+.landing--set-rust-collage .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-black-grid.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #2b1716; }
+.landing--set-rust-collage .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-red-weave.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-rust-collage .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-rust-collage .set-collage i { right: 7%; bottom: 10%; color: #f4d7c3; transform: rotate(-7deg); }
+.collection--set-rust-collage .wardrobe-stage { background: #873f32 url('/assets/paper-wine-grid.png') center/cover; }
+.collection--set-rust-collage .collection-header, .collection--set-rust-collage .collection-intro { color: #f4d7c3; }
+.signup-overlay--set-rust-collage .signup-sheet { background: #c48d72 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #2b1716; }
+
+/* midnight-fabric */
+.landing--set-midnight-fabric, .collection--set-midnight-fabric { --ink: #eed2bc; --wine: #090809; --orange: #8c5d53; --paper: #8c5d53; color: #eed2bc; background: #100e10 url('/assets/paper-black-grid.png') center / cover fixed; }
+.landing--set-midnight-fabric .reveal-logo::before { background: #8c5d53 url('/assets/paper-apricot.png') center / cover; border: 1px solid #090809; box-shadow: 12px 14px 0 #090809, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-midnight-fabric .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-midnight-fabric .landing-copy h1 em { color: #eed2bc; text-decoration: underline; text-decoration-color: #8c5d53; text-underline-offset: .15em; }
+.landing--set-midnight-fabric .primary-action { background: #090809; border-color: #8c5d53; color: #fff0df; }
+.landing--set-midnight-fabric .landing-swatch { background: #8c5d53; border: 1px solid #090809; }
+.landing--set-midnight-fabric .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/fabric-charcoal.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #090809; }
+.landing--set-midnight-fabric .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-midnight-fabric .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-midnight-fabric .set-collage i { right: 7%; bottom: 10%; color: #eed2bc; transform: rotate(-7deg); }
+.collection--set-midnight-fabric .wardrobe-stage { background: #100e10 url('/assets/paper-black-grid.png') center/cover; }
+.collection--set-midnight-fabric .collection-header, .collection--set-midnight-fabric .collection-intro { color: #eed2bc; }
+.signup-overlay--set-midnight-fabric .signup-sheet { background: #8c5d53 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #090809; }
+
+/* paper-slip */
+.landing--set-paper-slip, .collection--set-paper-slip { --ink: #251c1b; --wine: #59352e; --orange: #f5dfc8; --paper: #f5dfc8; color: #251c1b; background: #c18c79 url('/assets/paper-apricot.png') center / cover fixed; }
+.landing--set-paper-slip .reveal-logo::before { background: #f5dfc8 url('/assets/paper-coffee-grid.png') center / cover; border: 1px solid #59352e; box-shadow: 12px 14px 0 #59352e, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-paper-slip .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-paper-slip .landing-copy h1 em { color: #251c1b; text-decoration: underline; text-decoration-color: #f5dfc8; text-underline-offset: .15em; }
+.landing--set-paper-slip .primary-action { background: #59352e; border-color: #f5dfc8; color: #fff0df; }
+.landing--set-paper-slip .landing-swatch { background: #f5dfc8; border: 1px solid #59352e; }
+.landing--set-paper-slip .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #59352e; }
+.landing--set-paper-slip .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-paper-slip .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-paper-slip .set-collage i { right: 7%; bottom: 10%; color: #251c1b; transform: rotate(-7deg); }
+.collection--set-paper-slip .wardrobe-stage { background: #c18c79 url('/assets/paper-apricot.png') center/cover; }
+.collection--set-paper-slip .collection-header, .collection--set-paper-slip .collection-intro { color: #251c1b; }
+.signup-overlay--set-paper-slip .signup-sheet { background: #f5dfc8 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #59352e; }
+
+/* coffee-patchwork */
+.landing--set-coffee-patchwork, .collection--set-coffee-patchwork { --ink: #f2d4bb; --wine: #211717; --orange: #b58a75; --paper: #b58a75; color: #f2d4bb; background: #51342e url('/assets/paper-coffee-grid.png') center / cover fixed; }
+.landing--set-coffee-patchwork .reveal-logo::before { background: #b58a75 url('/assets/paper-apricot.png') center / cover; border: 1px solid #211717; box-shadow: 12px 14px 0 #211717, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-coffee-patchwork .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-coffee-patchwork .landing-copy h1 em { color: #f2d4bb; text-decoration: underline; text-decoration-color: #b58a75; text-underline-offset: .15em; }
+.landing--set-coffee-patchwork .primary-action { background: #211717; border-color: #b58a75; color: #fff0df; }
+.landing--set-coffee-patchwork .landing-swatch { background: #b58a75; border: 1px solid #211717; }
+.landing--set-coffee-patchwork .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/fabric-burgundy.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #211717; }
+.landing--set-coffee-patchwork .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-coffee-patchwork .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-coffee-patchwork .set-collage i { right: 7%; bottom: 10%; color: #f2d4bb; transform: rotate(-7deg); }
+.collection--set-coffee-patchwork .wardrobe-stage { background: #51342e url('/assets/paper-coffee-grid.png') center/cover; }
+.collection--set-coffee-patchwork .collection-header, .collection--set-coffee-patchwork .collection-intro { color: #f2d4bb; }
+.signup-overlay--set-coffee-patchwork .signup-sheet { background: #b58a75 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #211717; }
+
+/* apricot-noir */
+.landing--set-apricot-noir, .collection--set-apricot-noir { --ink: #f5d0b3; --wine: #110e0e; --orange: #c48d76; --paper: #c48d76; color: #f5d0b3; background: #241819 url('/assets/paper-black-grid.png') center / cover fixed; }
+.landing--set-apricot-noir .reveal-logo::before { background: #c48d76 url('/assets/paper-apricot.png') center / cover; border: 1px solid #110e0e; box-shadow: 12px 14px 0 #110e0e, 0 24px 55px #130d0c55; transform: rotate(-1.5deg); }
+.landing--set-apricot-noir .reveal-logo .brand-logo { mix-blend-mode: multiply; filter: none; }
+.landing--set-apricot-noir .landing-copy h1 em { color: #f5d0b3; text-decoration: underline; text-decoration-color: #c48d76; text-underline-offset: .15em; }
+.landing--set-apricot-noir .primary-action { background: #110e0e; border-color: #c48d76; color: #fff0df; }
+.landing--set-apricot-noir .landing-swatch { background: #c48d76; border: 1px solid #110e0e; }
+.landing--set-apricot-noir .set-collage__paper { top: 11%; right: -3%; width: 31%; height: 34%; background: url('/assets/paper-apricot.png') center/cover; clip-path: polygon(3% 0, 100% 5%, 96% 100%, 0 94%); transform: rotate(7deg); box-shadow: 12px 12px 0 #110e0e; }
+.landing--set-apricot-noir .set-collage__fabric { bottom: -3%; left: -4%; width: 35%; height: 33%; background: url('/assets/fabric-black-knit.png') center/cover; clip-path: polygon(0 5%,95% 0,100% 94%,7% 100%); transform: rotate(-8deg); opacity: .75; }
+.landing--set-apricot-noir .set-collage__tape { top: 18%; right: 24%; width: 6.5rem; height: 1.4rem; background: #e4bc67c9; transform: rotate(-24deg); }
+.landing--set-apricot-noir .set-collage i { right: 7%; bottom: 10%; color: #f5d0b3; transform: rotate(-7deg); }
+.collection--set-apricot-noir .wardrobe-stage { background: #241819 url('/assets/paper-black-grid.png') center/cover; }
+.collection--set-apricot-noir .collection-header, .collection--set-apricot-noir .collection-intro { color: #f5d0b3; }
+.signup-overlay--set-apricot-noir .signup-sheet { background: #c48d76 url('/assets/paper-apricot.png') center/cover; color: #251a17; box-shadow: 12px 14px 0 #110e0e; }
+.landing--set-tailors-table .landing-swatch--one { transform: rotate(-14deg) translateY(1.4rem); }
+.landing--set-tailors-table .landing-swatch--two { transform: rotate(12deg); }
+.landing--set-rust-collage .landing-swatch--one { transform: rotate(-14deg) translateY(1.4rem); }
+.landing--set-rust-collage .landing-swatch--two { transform: rotate(12deg); }
+.landing--set-coffee-patchwork .landing-swatch--one { transform: rotate(-14deg) translateY(1.4rem); }
+.landing--set-coffee-patchwork .landing-swatch--two { transform: rotate(12deg); }
+.landing--set-blush-scrapbook .reveal-logo::before { clip-path: polygon(0 4%,96% 0,100% 94%,5% 100%); transform: rotate(2deg); }
+.landing--set-blush-scrapbook .landing-swatch--three { transform: rotate(-12deg); }
+.landing--set-paper-slip .reveal-logo::before { clip-path: polygon(0 4%,96% 0,100% 94%,5% 100%); transform: rotate(2deg); }
+.landing--set-paper-slip .landing-swatch--three { transform: rotate(-12deg); }
+.landing--set-wine-notebook .reveal-logo::before { clip-path: polygon(0 4%,96% 0,100% 94%,5% 100%); transform: rotate(2deg); }
+.landing--set-wine-notebook .landing-swatch--three { transform: rotate(-12deg); }
+
+@media(max-width:700px) { .set-picker { bottom: .5rem; left: .5rem; width: calc(100vw - 1rem); max-height: 22vh; } .set-picker > div { grid-template-columns: repeat(3,minmax(0,1fr)); } .set-picker button { min-height: 2.7rem; padding: .3rem; } .set-picker button i { display:none; } .concept-picker { bottom: calc(22vh + .9rem); } }
+
+.landing--set-tailors-cutting-mat, .collection--set-tailors-cutting-mat { --ink: #382620; --orange: #ad7158; --wine: #382620; --paper: #f3dac6; color: #382620; background: #d9a68b url('/assets/paper-apricot.png') center/cover fixed; }
+.landing--set-tailors-cutting-mat .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #382620; box-shadow: 10px 12px 0 #38262077; transform: rotate(-2deg); }
+.landing--set-tailors-cutting-mat .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-tailors-cutting-mat .landing-copy h1 em { color: #382620; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-tailors-cutting-mat .primary-action { background: #382620; border-color: #382620; color: #f9e7d6; }
+.landing--set-tailors-cutting-mat .landing-swatch { background: #f2d9c6; border: 1px solid #382620; color: #382620; }
+.landing--set-tailors-cutting-mat .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-tailors-cutting-mat .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-tailors-cutting-mat .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-tailors-cutting-mat .wardrobe-stage { background: #d9a68b url('/assets/paper-apricot.png') center/cover; }
+.collection--set-tailors-cutting-mat .collection-header, .collection--set-tailors-cutting-mat .collection-intro { color: #382620; }
+.signup-overlay--set-tailors-cutting-mat .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #382620; box-shadow: 12px 15px 0 #382620; }
+
+.landing--set-tailors-notes, .collection--set-tailors-notes { --ink: #271b19; --orange: #ad7158; --wine: #271b19; --paper: #f3dac6; color: #f4dfc8; background: #a8735c url('/assets/paper-coffee-grid.png') center/cover fixed; }
+.landing--set-tailors-notes .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #271b19; box-shadow: 10px 12px 0 #271b1977; transform: rotate(-2deg); }
+.landing--set-tailors-notes .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-tailors-notes .landing-copy h1 em { color: #f4dfc8; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-tailors-notes .primary-action { background: #271b19; border-color: #271b19; color: #f9e7d6; }
+.landing--set-tailors-notes .landing-swatch { background: #f2d9c6; border: 1px solid #271b19; color: #271b19; }
+.landing--set-tailors-notes .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-tailors-notes .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-tailors-notes .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-tailors-notes .wardrobe-stage { background: #a8735c url('/assets/paper-coffee-grid.png') center/cover; }
+.collection--set-tailors-notes .collection-header, .collection--set-tailors-notes .collection-intro { color: #f4dfc8; }
+.signup-overlay--set-tailors-notes .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #271b19; box-shadow: 12px 15px 0 #271b19; }
+
+.landing--set-tailors-pattern-room, .collection--set-tailors-pattern-room { --ink: #3b2926; --orange: #ad7158; --wine: #3b2926; --paper: #f3dac6; color: #f6e3d5; background: #c59a83 url('/assets/paper-apricot.png') center/cover fixed; }
+.landing--set-tailors-pattern-room .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #3b2926; box-shadow: 10px 12px 0 #3b292677; transform: rotate(-2deg); }
+.landing--set-tailors-pattern-room .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-tailors-pattern-room .landing-copy h1 em { color: #f6e3d5; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-tailors-pattern-room .primary-action { background: #3b2926; border-color: #3b2926; color: #f9e7d6; }
+.landing--set-tailors-pattern-room .landing-swatch { background: #f2d9c6; border: 1px solid #3b2926; color: #3b2926; }
+.landing--set-tailors-pattern-room .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-tailors-pattern-room .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-tailors-pattern-room .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-tailors-pattern-room .wardrobe-stage { background: #c59a83 url('/assets/paper-apricot.png') center/cover; }
+.collection--set-tailors-pattern-room .collection-header, .collection--set-tailors-pattern-room .collection-intro { color: #f6e3d5; }
+.signup-overlay--set-tailors-pattern-room .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #3b2926; box-shadow: 12px 15px 0 #3b2926; }
+
+.landing--set-apricot-muslin, .collection--set-apricot-muslin { --ink: #4b3029; --orange: #ad7158; --wine: #4b3029; --paper: #f3dac6; color: #4b3029; background: #e5b79c url('/assets/paper-apricot.png') center/cover fixed; }
+.landing--set-apricot-muslin .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #4b3029; box-shadow: 10px 12px 0 #4b302977; transform: rotate(-2deg); }
+.landing--set-apricot-muslin .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-apricot-muslin .landing-copy h1 em { color: #4b3029; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-apricot-muslin .primary-action { background: #4b3029; border-color: #4b3029; color: #f9e7d6; }
+.landing--set-apricot-muslin .landing-swatch { background: #f2d9c6; border: 1px solid #4b3029; color: #4b3029; }
+.landing--set-apricot-muslin .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-apricot-muslin .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-apricot-muslin .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-apricot-muslin .wardrobe-stage { background: #e5b79c url('/assets/paper-apricot.png') center/cover; }
+.collection--set-apricot-muslin .collection-header, .collection--set-apricot-muslin .collection-intro { color: #4b3029; }
+.signup-overlay--set-apricot-muslin .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #4b3029; box-shadow: 12px 15px 0 #4b3029; }
+
+.landing--set-apricot-coffee, .collection--set-apricot-coffee { --ink: #31221e; --orange: #ad7158; --wine: #31221e; --paper: #f3dac6; color: #31221e; background: #c98f73 url('/assets/paper-apricot.png') center/cover fixed; }
+.landing--set-apricot-coffee .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #31221e; box-shadow: 10px 12px 0 #31221e77; transform: rotate(-2deg); }
+.landing--set-apricot-coffee .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-apricot-coffee .landing-copy h1 em { color: #31221e; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-apricot-coffee .primary-action { background: #31221e; border-color: #31221e; color: #f9e7d6; }
+.landing--set-apricot-coffee .landing-swatch { background: #f2d9c6; border: 1px solid #31221e; color: #31221e; }
+.landing--set-apricot-coffee .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-apricot-coffee .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-apricot-coffee .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-apricot-coffee .wardrobe-stage { background: #c98f73 url('/assets/paper-apricot.png') center/cover; }
+.collection--set-apricot-coffee .collection-header, .collection--set-apricot-coffee .collection-intro { color: #31221e; }
+.signup-overlay--set-apricot-coffee .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #31221e; box-shadow: 12px 15px 0 #31221e; }
+
+.landing--set-peach-ledger, .collection--set-peach-ledger { --ink: #51342e; --orange: #ad7158; --wine: #51342e; --paper: #f3dac6; color: #51342e; background: #e9bca9 url('/assets/paper-apricot.png') center/cover fixed; }
+.landing--set-peach-ledger .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #51342e; box-shadow: 10px 12px 0 #51342e77; transform: rotate(-2deg); }
+.landing--set-peach-ledger .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-peach-ledger .landing-copy h1 em { color: #51342e; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-peach-ledger .primary-action { background: #51342e; border-color: #51342e; color: #f9e7d6; }
+.landing--set-peach-ledger .landing-swatch { background: #f2d9c6; border: 1px solid #51342e; color: #51342e; }
+.landing--set-peach-ledger .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-peach-ledger .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-peach-ledger .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-peach-ledger .wardrobe-stage { background: #e9bca9 url('/assets/paper-apricot.png') center/cover; }
+.collection--set-peach-ledger .collection-header, .collection--set-peach-ledger .collection-intro { color: #51342e; }
+.signup-overlay--set-peach-ledger .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #51342e; box-shadow: 12px 15px 0 #51342e; }
+
+.landing--set-sunset-ink, .collection--set-sunset-ink { --ink: #21191a; --orange: #ad7158; --wine: #21191a; --paper: #f3dac6; color: #f7ddc7; background: #b8795d url('/assets/paper-coffee-grid.png') center/cover fixed; }
+.landing--set-sunset-ink .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #21191a; box-shadow: 10px 12px 0 #21191a77; transform: rotate(-2deg); }
+.landing--set-sunset-ink .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-sunset-ink .landing-copy h1 em { color: #f7ddc7; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-sunset-ink .primary-action { background: #21191a; border-color: #21191a; color: #f9e7d6; }
+.landing--set-sunset-ink .landing-swatch { background: #f2d9c6; border: 1px solid #21191a; color: #21191a; }
+.landing--set-sunset-ink .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-sunset-ink .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-sunset-ink .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-sunset-ink .wardrobe-stage { background: #b8795d url('/assets/paper-coffee-grid.png') center/cover; }
+.collection--set-sunset-ink .collection-header, .collection--set-sunset-ink .collection-intro { color: #f7ddc7; }
+.signup-overlay--set-sunset-ink .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #21191a; box-shadow: 12px 15px 0 #21191a; }
+
+.landing--set-apricot-patchwork, .collection--set-apricot-patchwork { --ink: #3a2525; --orange: #ad7158; --wine: #3a2525; --paper: #f3dac6; color: #3a2525; background: #dfab8c url('/assets/paper-apricot.png') center/cover fixed; }
+.landing--set-apricot-patchwork .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #3a2525; box-shadow: 10px 12px 0 #3a252577; transform: rotate(-2deg); }
+.landing--set-apricot-patchwork .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-apricot-patchwork .landing-copy h1 em { color: #3a2525; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-apricot-patchwork .primary-action { background: #3a2525; border-color: #3a2525; color: #f9e7d6; }
+.landing--set-apricot-patchwork .landing-swatch { background: #f2d9c6; border: 1px solid #3a2525; color: #3a2525; }
+.landing--set-apricot-patchwork .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-apricot-patchwork .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-apricot-patchwork .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-apricot-patchwork .wardrobe-stage { background: #dfab8c url('/assets/paper-apricot.png') center/cover; }
+.collection--set-apricot-patchwork .collection-header, .collection--set-apricot-patchwork .collection-intro { color: #3a2525; }
+.signup-overlay--set-apricot-patchwork .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #3a2525; box-shadow: 12px 15px 0 #3a2525; }
+
+.landing--set-soft-saffron, .collection--set-soft-saffron { --ink: #352a24; --orange: #ad7158; --wine: #352a24; --paper: #f3dac6; color: #352a24; background: #dcb08a url('/assets/paper-apricot.png') center/cover fixed; }
+.landing--set-soft-saffron .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #352a24; box-shadow: 10px 12px 0 #352a2477; transform: rotate(-2deg); }
+.landing--set-soft-saffron .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-soft-saffron .landing-copy h1 em { color: #352a24; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-soft-saffron .primary-action { background: #352a24; border-color: #352a24; color: #f9e7d6; }
+.landing--set-soft-saffron .landing-swatch { background: #f2d9c6; border: 1px solid #352a24; color: #352a24; }
+.landing--set-soft-saffron .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-soft-saffron .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-soft-saffron .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-soft-saffron .wardrobe-stage { background: #dcb08a url('/assets/paper-apricot.png') center/cover; }
+.collection--set-soft-saffron .collection-header, .collection--set-soft-saffron .collection-intro { color: #352a24; }
+.signup-overlay--set-soft-saffron .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #352a24; box-shadow: 12px 15px 0 #352a24; }
+
+.landing--set-notebook-buttons, .collection--set-notebook-buttons { --ink: #382525; --orange: #ad7158; --wine: #382525; --paper: #f3dac6; color: #382525; background: #d9a89b url('/assets/paper-apricot.png') center/cover fixed; }
+.landing--set-notebook-buttons .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #382525; box-shadow: 10px 12px 0 #38252577; transform: rotate(-2deg); }
+.landing--set-notebook-buttons .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-notebook-buttons .landing-copy h1 em { color: #382525; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-notebook-buttons .primary-action { background: #382525; border-color: #382525; color: #f9e7d6; }
+.landing--set-notebook-buttons .landing-swatch { background: #f2d9c6; border: 1px solid #382525; color: #382525; }
+.landing--set-notebook-buttons .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-notebook-buttons .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-notebook-buttons .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-notebook-buttons .wardrobe-stage { background: #d9a89b url('/assets/paper-apricot.png') center/cover; }
+.collection--set-notebook-buttons .collection-header, .collection--set-notebook-buttons .collection-intro { color: #382525; }
+.signup-overlay--set-notebook-buttons .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #382525; box-shadow: 12px 15px 0 #382525; }
+
+.landing--set-pinned-slip, .collection--set-pinned-slip { --ink: #2e2020; --orange: #ad7158; --wine: #2e2020; --paper: #f3dac6; color: #f4d9c7; background: #b98877 url('/assets/paper-coffee-grid.png') center/cover fixed; }
+.landing--set-pinned-slip .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #2e2020; box-shadow: 10px 12px 0 #2e202077; transform: rotate(-2deg); }
+.landing--set-pinned-slip .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-pinned-slip .landing-copy h1 em { color: #f4d9c7; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-pinned-slip .primary-action { background: #2e2020; border-color: #2e2020; color: #f9e7d6; }
+.landing--set-pinned-slip .landing-swatch { background: #f2d9c6; border: 1px solid #2e2020; color: #2e2020; }
+.landing--set-pinned-slip .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-pinned-slip .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-pinned-slip .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-pinned-slip .wardrobe-stage { background: #b98877 url('/assets/paper-coffee-grid.png') center/cover; }
+.collection--set-pinned-slip .collection-header, .collection--set-pinned-slip .collection-intro { color: #f4d9c7; }
+.signup-overlay--set-pinned-slip .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #2e2020; box-shadow: 12px 15px 0 #2e2020; }
+
+.landing--set-workroom-collage, .collection--set-workroom-collage { --ink: #2a1b1b; --orange: #ad7158; --wine: #2a1b1b; --paper: #f3dac6; color: #f7e3d0; background: #bc8b71 url('/assets/paper-coffee-grid.png') center/cover fixed; }
+.landing--set-workroom-collage .reveal-logo::before { background: #e9c3a8 url('/assets/paper-apricot.png') center/cover; border: 1px solid #2a1b1b; box-shadow: 10px 12px 0 #2a1b1b77; transform: rotate(-2deg); }
+.landing--set-workroom-collage .reveal-logo .brand-logo { filter: none; mix-blend-mode: multiply; }
+.landing--set-workroom-collage .landing-copy h1 em { color: #f7e3d0; text-decoration: underline; text-decoration-color: #b26c4c; text-underline-offset: .16em; }
+.landing--set-workroom-collage .primary-action { background: #2a1b1b; border-color: #2a1b1b; color: #f9e7d6; }
+.landing--set-workroom-collage .landing-swatch { background: #f2d9c6; border: 1px solid #2a1b1b; color: #2a1b1b; }
+.landing--set-workroom-collage .set-collage__paper { top: 12%; right: -2%; width: 33%; height: 34%; background: url('/assets/paper-coffee-grid.png') center/cover; transform: rotate(8deg); clip-path: polygon(0 5%,95% 0,100% 95%,4% 100%); }
+.landing--set-workroom-collage .set-collage__fabric { bottom: 1%; left: -3%; width: 32%; height: 29%; background: url('/assets/fabric-black-knit.png') center/cover; transform: rotate(-8deg); clip-path: polygon(2% 2%,100% 0,95% 100%,0 94%); opacity: .78; }
+.landing--set-workroom-collage .set-collage__tape { top: 20%; right: 25%; width: 6rem; height: 1.4rem; background: #e8c16dba; transform: rotate(-25deg); }
+.collection--set-workroom-collage .wardrobe-stage { background: #bc8b71 url('/assets/paper-coffee-grid.png') center/cover; }
+.collection--set-workroom-collage .collection-header, .collection--set-workroom-collage .collection-intro { color: #f7e3d0; }
+.signup-overlay--set-workroom-collage .signup-sheet { background: #e4bda5 url('/assets/paper-apricot.png') center/cover; color: #2a1b1b; box-shadow: 12px 15px 0 #2a1b1b; }
+
+.worktable-props { display:none; position:absolute; inset:0; pointer-events:none; }
+.landing--set-tailors-table .worktable-props { display:block; }
+.landing--set-tailors-cutting-mat .worktable-props { display:block; }
+.landing--set-tailors-notes .worktable-props { display:block; }
+.landing--set-tailors-pattern-room .worktable-props { display:block; }
+.landing--set-workroom-collage .worktable-props { display:block; }
+.landing--set-apricot-patchwork .worktable-props { display:block; }
+
+.worktable-props span { position:absolute; display:block; z-index:2; }
+.worktable-ruler { top:13%; left:3%; width:23%; height:2.8rem; transform:rotate(-22deg); background:repeating-linear-gradient(90deg,transparent 0 11px,#68452d 12px 13px,transparent 14px 16px),linear-gradient(#d9ae71,#b9814d); border:2px solid #82552e; box-shadow:3px 7px 13px #25161255; }
+.worktable-scissors { top:19%; right:8%; font:clamp(5rem,12vw,11rem)/1 Georgia,serif; color:#252122; transform:rotate(-25deg); text-shadow:4px 6px 2px #0004; }
+.worktable-pencil { bottom:20%; left:10%; font:clamp(5rem,10vw,9rem)/1 Georgia,serif; color:#f2c451; transform:rotate(-35deg); text-shadow:3px 5px #41291c; }
+.worktable-tape { right:9%; bottom:19%; padding:.35rem 1.8rem; background:#e4c06d; color:#533c27; font:1.2rem 'Reenie Beanie',cursive; transform:rotate(32deg); }
+.worktable-pattern { top:35%; right:4%; width:19%; min-height:10rem; padding:1.4rem 1rem; background:#f5dfc5e8; color:#513a2f; border:1px dashed #6b5247; transform:rotate(12deg); font:1.1rem/1.9 'Reenie Beanie',cursive; }
+.worktable-pin { left:13%; top:39%; color:#c7a0a0; font-size:3rem; }
+.workroom-annotations { display:none; justify-content:space-around; gap:1rem; padding:.8rem; color:#f1d9c6; font:1.5rem 'Reenie Beanie',cursive; }
+.collection--set-tailors-table .workroom-annotations { display:flex; }
+.collection--set-tailors-cutting-mat .workroom-annotations { display:flex; }
+.collection--set-tailors-notes .workroom-annotations { display:flex; }
+.collection--set-tailors-pattern-room .workroom-annotations { display:flex; }
+.collection--set-workroom-collage .workroom-annotations { display:flex; }
+.collection--set-apricot-patchwork .workroom-annotations { display:flex; }
+
+/* Handwritten links physically sit inside the crumpled logo sheet. */
+.paper-note-actions { position:relative; z-index:2; display:flex; justify-content:center; gap:clamp(1rem,4vw,3rem); margin:-1.5rem auto .6rem; padding-bottom:1.6rem; color:#392923; }
+.paper-note-actions button { border:0; border-bottom:2px solid #4d3932; padding:.2rem .1rem; background:transparent; color:inherit; font:clamp(1.25rem,2.5vw,2rem)/1.1 'Reenie Beanie',cursive; transform:rotate(-3deg); }
+.paper-note-actions button:nth-child(2) { transform:rotate(2deg); }
+.paper-note-actions button:hover { color:#a3523e; border-bottom-color:#a3523e; }
+.landing-actions--hidden { display:none; }
+.landing:has(.paper-note-actions) .reveal-logo { padding-bottom:0; }
+.landing:has(.paper-note-actions) .reveal-logo::before { inset:4% 0 0; }
+@media(max-width:700px) {
+ .worktable-ruler { top:16%; width:38%; height:1.7rem; }
+ .worktable-scissors { top:23%; right:2%; font-size:4.8rem; }
+ .worktable-pencil { bottom:28%; left:2%; font-size:5rem; }
+ .worktable-pattern { top:58%; right:1%; width:31%; min-height:5rem; padding:.4rem; font-size:.8rem; }
+ .paper-note-actions { flex-direction:column; align-items:center; gap:.35rem; margin:-.8rem auto 0; padding-bottom:1rem; }
+ .paper-note-actions button { font-size:1.45rem; }
+ .landing:has(.paper-note-actions) .reveal-logo .brand-logo { height:7rem; }
+ .set-picker { max-height:20vh; }
+ .concept-picker { bottom:calc(20vh + 1rem); }
+}
+
+/* 2026 material revision: real supplied crumpled/grid apricot papers. Older 15 themes unchanged. */
+
+.landing--set-apricot-muslin, .collection--set-apricot-muslin { background: #f1d2b7 url('/assets/new-apricot-paper-1.png') center/cover fixed !important; color:#251915 !important; --ink:#251915; --wine:#442621; --orange:#653225; --paper:#f8e8d7; }
+.landing--set-apricot-muslin .landing-copy h1 em { color:#532b22 !important; }
+.landing--set-apricot-muslin .landing-header, .landing--set-apricot-muslin .landing-copy, .landing--set-apricot-muslin .landing-note, .collection--set-apricot-muslin .collection-header, .collection--set-apricot-muslin .collection-intro { color:#251915 !important; }
+.collection--set-apricot-muslin .wardrobe-stage { background: url('/assets/new-apricot-paper-1.png') center/cover !important; }
+
+.landing--set-apricot-coffee, .collection--set-apricot-coffee { background: #f1d5bd url('/assets/new-apricot-paper-2.png') center/cover fixed !important; color:#251915 !important; --ink:#251915; --wine:#442621; --orange:#653225; --paper:#f8e8d7; }
+.landing--set-apricot-coffee .landing-copy h1 em { color:#532b22 !important; }
+.landing--set-apricot-coffee .landing-header, .landing--set-apricot-coffee .landing-copy, .landing--set-apricot-coffee .landing-note, .collection--set-apricot-coffee .collection-header, .collection--set-apricot-coffee .collection-intro { color:#251915 !important; }
+.collection--set-apricot-coffee .wardrobe-stage { background: url('/assets/new-apricot-paper-2.png') center/cover !important; }
+
+.landing--set-peach-ledger, .collection--set-peach-ledger { background: #f1d1bb url('/assets/new-apricot-paper-3.png') center/cover fixed !important; color:#251915 !important; --ink:#251915; --wine:#442621; --orange:#653225; --paper:#f8e8d7; }
+.landing--set-peach-ledger .landing-copy h1 em { color:#532b22 !important; }
+.landing--set-peach-ledger .landing-header, .landing--set-peach-ledger .landing-copy, .landing--set-peach-ledger .landing-note, .collection--set-peach-ledger .collection-header, .collection--set-peach-ledger .collection-intro { color:#251915 !important; }
+.collection--set-peach-ledger .wardrobe-stage { background: url('/assets/new-apricot-paper-3.png') center/cover !important; }
+
+.landing--set-sunset-ink, .collection--set-sunset-ink { background: #f7dfc5 url('/assets/new-apricot-paper-4.png') center/cover fixed !important; color:#251915 !important; --ink:#251915; --wine:#442621; --orange:#653225; --paper:#f8e8d7; }
+.landing--set-sunset-ink .landing-copy h1 em { color:#532b22 !important; }
+.landing--set-sunset-ink .landing-header, .landing--set-sunset-ink .landing-copy, .landing--set-sunset-ink .landing-note, .collection--set-sunset-ink .collection-header, .collection--set-sunset-ink .collection-intro { color:#251915 !important; }
+.collection--set-sunset-ink .wardrobe-stage { background: url('/assets/new-apricot-paper-4.png') center/cover !important; }
+
+.landing--set-apricot-patchwork, .collection--set-apricot-patchwork { background: #efd4c0 url('/assets/new-apricot-paper-5.png') center/cover fixed !important; color:#251915 !important; --ink:#251915; --wine:#442621; --orange:#653225; --paper:#f8e8d7; }
+.landing--set-apricot-patchwork .landing-copy h1 em { color:#532b22 !important; }
+.landing--set-apricot-patchwork .landing-header, .landing--set-apricot-patchwork .landing-copy, .landing--set-apricot-patchwork .landing-note, .collection--set-apricot-patchwork .collection-header, .collection--set-apricot-patchwork .collection-intro { color:#251915 !important; }
+.collection--set-apricot-patchwork .wardrobe-stage { background: url('/assets/new-apricot-paper-5.png') center/cover !important; }
+
+.landing--set-soft-saffron, .collection--set-soft-saffron { background: #f0d1b6 url('/assets/new-apricot-paper-6.png') center/cover fixed !important; color:#251915 !important; --ink:#251915; --wine:#442621; --orange:#653225; --paper:#f8e8d7; }
+.landing--set-soft-saffron .landing-copy h1 em { color:#532b22 !important; }
+.landing--set-soft-saffron .landing-header, .landing--set-soft-saffron .landing-copy, .landing--set-soft-saffron .landing-note, .collection--set-soft-saffron .collection-header, .collection--set-soft-saffron .collection-intro { color:#251915 !important; }
+.collection--set-soft-saffron .wardrobe-stage { background: url('/assets/new-apricot-paper-6.png') center/cover !important; }
+
+/* Each visual set receives its own wardrobe composition, independently of the three selectable layout modes. */
+.collection { --wardrobe-accent:#6c342b; --wardrobe-rotation:0deg; --wardrobe-gap:1rem; }
+.collection .wardrobe-stage { isolation:isolate; }
+.collection .wardrobe-shell { transform:rotate(var(--wardrobe-rotation)); transition:transform .35s ease; }
+.collection .garment-grid { gap:var(--wardrobe-gap); }
+.theme-wardrobe-decor { position:absolute; inset:0; pointer-events:none; z-index:2; }
+.theme-wardrobe-decor > span { position:absolute; display:block; }
+.theme-wardrobe-decor__ruler { width:19%; height:1.8rem; top:7%; left:6%; transform:rotate(-13deg); border:1px solid #70492f; background:repeating-linear-gradient(90deg,transparent 0 11px,#6b4b33 12px 13px,transparent 14px 18px),#d8ae77; box-shadow:4px 6px 10px #160d0b45; }
+.theme-wardrobe-decor__swatch { width:14%; height:21%; right:5%; bottom:5%; transform:rotate(13deg); background:url('/assets/fabric-red-weave.png') center/cover; border:7px solid #ead9c4; box-shadow:4px 7px 15px #160d0b55; clip-path:polygon(0 0,100% 0,100% 94%,94% 100%,88% 94%,82% 100%,76% 94%,70% 100%,64% 94%,58% 100%,52% 94%,46% 100%,40% 94%,34% 100%,28% 94%,22% 100%,16% 94%,10% 100%,0 94%); }
+.theme-wardrobe-decor__slip { top:15%; right:4%; padding:1.2rem; transform:rotate(8deg); color:#34231c; background:linear-gradient(transparent 95%,#c1a99c 96%) 0 0/100% 1.5rem,#f2dfc9; font:1.1rem/1.5 'Reenie Beanie',cursive; box-shadow:5px 6px 12px #21130d44; }
+.theme-wardrobe-decor__thread { bottom:9%; left:7%; color:#f1c68a; font-size:4rem; }
+.theme-wardrobe-decor__shears { top:4%; right:21%; color:#2c2625; font:5rem Georgia,serif; transform:rotate(-22deg); text-shadow:3px 5px 5px #1d0d0d55; }
+/* Per-set individual configurations: positioning, texture, color, and shape. */
+
+.collection--set-paper-study { --wardrobe-rotation:-1.00deg; --wardrobe-gap:0.6rem; }
+.collection--set-paper-study .wardrobe-shell { margin-left:-3%; width:87%; }
+.collection--set-paper-study .garment:nth-child(2n) { transform:translateY(-9px) rotate(-2.4deg); }
+.collection--set-paper-study .garment:nth-child(2n+1) { transform:translateY(-8px) rotate(-1.1deg); }
+.collection--set-paper-study .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-black-knit.png'); right:3%; bottom:3%; transform:rotate(-7deg); }
+.collection--set-paper-study .theme-wardrobe-decor__slip { right:3%; top:7%; transform:rotate(-10deg); }
+.collection--set-paper-study .theme-wardrobe-decor__ruler { left:3%; top:5%; transform:rotate(-12deg); }
+
+.collection--set-cloth-paper { --wardrobe-rotation:-0.33deg; --wardrobe-gap:0.85rem; }
+.collection--set-cloth-paper .wardrobe-shell { margin-left:-1%; width:89%; }
+.collection--set-cloth-paper .garment:nth-child(2n) { transform:translateY(0px) rotate(-1.2deg); }
+.collection--set-cloth-paper .garment:nth-child(2n+1) { transform:translateY(0px) rotate(0.0deg); }
+.collection--set-cloth-paper .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-red-weave.png'); right:4%; bottom:4%; transform:rotate(10deg); }
+.collection--set-cloth-paper .theme-wardrobe-decor__slip { right:4%; top:8%; transform:rotate(-3deg); }
+.collection--set-cloth-paper .theme-wardrobe-decor__ruler { left:4%; top:6%; transform:rotate(-3deg); }
+
+.collection--set-apricot-archive { --wardrobe-rotation:0.33deg; --wardrobe-gap:1.1rem; }
+.collection--set-apricot-archive .wardrobe-shell { margin-left:1%; width:89%; }
+.collection--set-apricot-archive .garment:nth-child(2n) { transform:translateY(9px) rotate(0.0deg); }
+.collection--set-apricot-archive .garment:nth-child(2n+1) { transform:translateY(8px) rotate(1.1deg); }
+.collection--set-apricot-archive .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-burgundy.png'); right:5%; bottom:5%; transform:rotate(-21deg); }
+.collection--set-apricot-archive .theme-wardrobe-decor__slip { right:5%; top:9%; transform:rotate(4deg); }
+.collection--set-apricot-archive .theme-wardrobe-decor__ruler { left:5%; top:7%; transform:rotate(6deg); }
+
+.collection--set-coffee-ledger { --wardrobe-rotation:1.00deg; --wardrobe-gap:1.4rem; }
+.collection--set-coffee-ledger .wardrobe-shell { margin-left:3%; width:87%; }
+.collection--set-coffee-ledger .garment:nth-child(2n) { transform:translateY(18px) rotate(1.2deg); }
+.collection--set-coffee-ledger .garment:nth-child(2n+1) { transform:translateY(-16px) rotate(2.2deg); }
+.collection--set-coffee-ledger .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-gold.png'); right:6%; bottom:6%; transform:rotate(-4deg); }
+.collection--set-coffee-ledger .theme-wardrobe-decor__slip { right:6%; top:10%; transform:rotate(11deg); }
+.collection--set-coffee-ledger .theme-wardrobe-decor__ruler { left:6%; top:8%; transform:rotate(15deg); }
+
+.collection--set-black-atelier { --wardrobe-rotation:1.67deg; --wardrobe-gap:0.35rem; }
+.collection--set-black-atelier .wardrobe-shell { margin-left:5%; width:85%; }
+.collection--set-black-atelier .garment:nth-child(2n) { transform:translateY(-18px) rotate(2.4deg); }
+.collection--set-black-atelier .garment:nth-child(2n+1) { transform:translateY(-8px) rotate(-2.2deg); }
+.collection--set-black-atelier .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-black-knit.png'); right:7%; bottom:7%; transform:rotate(13deg); }
+.collection--set-black-atelier .theme-wardrobe-decor__slip { right:7%; top:11%; transform:rotate(-16deg); }
+.collection--set-black-atelier .theme-wardrobe-decor__ruler { left:7%; top:9%; transform:rotate(-18deg); }
+
+.collection--set-wine-notebook { --wardrobe-rotation:-1.67deg; --wardrobe-gap:0.6rem; }
+.collection--set-wine-notebook .wardrobe-shell { margin-left:-5%; width:85%; }
+.collection--set-wine-notebook .garment:nth-child(2n) { transform:translateY(-9px) rotate(3.6deg); }
+.collection--set-wine-notebook .garment:nth-child(2n+1) { transform:translateY(0px) rotate(-1.1deg); }
+.collection--set-wine-notebook .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-red-weave.png'); right:8%; bottom:8%; transform:rotate(-18deg); }
+.collection--set-wine-notebook .theme-wardrobe-decor__slip { right:8%; top:12%; transform:rotate(-9deg); }
+.collection--set-wine-notebook .theme-wardrobe-decor__ruler { left:8%; top:10%; transform:rotate(-9deg); }
+
+.collection--set-tailors-table { --wardrobe-rotation:-1.00deg; --wardrobe-gap:0.85rem; }
+.collection--set-tailors-table .wardrobe-shell { margin-left:-3%; width:87%; }
+.collection--set-tailors-table .garment:nth-child(2n) { transform:translateY(0px) rotate(-3.6deg); }
+.collection--set-tailors-table .garment:nth-child(2n+1) { transform:translateY(8px) rotate(0.0deg); }
+.collection--set-tailors-table .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-burgundy.png'); right:9%; bottom:9%; transform:rotate(-1deg); }
+.collection--set-tailors-table .theme-wardrobe-decor__slip { right:9%; top:13%; transform:rotate(-2deg); }
+.collection--set-tailors-table .theme-wardrobe-decor__ruler { left:9%; top:11%; transform:rotate(0deg); }
+
+.collection--set-blush-scrapbook { --wardrobe-rotation:-0.33deg; --wardrobe-gap:1.1rem; }
+.collection--set-blush-scrapbook .wardrobe-shell { margin-left:-1%; width:89%; }
+.collection--set-blush-scrapbook .garment:nth-child(2n) { transform:translateY(9px) rotate(-2.4deg); }
+.collection--set-blush-scrapbook .garment:nth-child(2n+1) { transform:translateY(-16px) rotate(1.1deg); }
+.collection--set-blush-scrapbook .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-gold.png'); right:10%; bottom:10%; transform:rotate(16deg); }
+.collection--set-blush-scrapbook .theme-wardrobe-decor__slip { right:10%; top:14%; transform:rotate(5deg); }
+.collection--set-blush-scrapbook .theme-wardrobe-decor__ruler { left:10%; top:12%; transform:rotate(9deg); }
+
+.collection--set-ink-grid { --wardrobe-rotation:0.33deg; --wardrobe-gap:1.4rem; }
+.collection--set-ink-grid .wardrobe-shell { margin-left:1%; width:89%; }
+.collection--set-ink-grid .garment:nth-child(2n) { transform:translateY(18px) rotate(-1.2deg); }
+.collection--set-ink-grid .garment:nth-child(2n+1) { transform:translateY(-8px) rotate(2.2deg); }
+.collection--set-ink-grid .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-black-knit.png'); right:11%; bottom:11%; transform:rotate(-15deg); }
+.collection--set-ink-grid .theme-wardrobe-decor__slip { right:11%; top:15%; transform:rotate(12deg); }
+.collection--set-ink-grid .theme-wardrobe-decor__ruler { left:11%; top:13%; transform:rotate(18deg); }
+
+.collection--set-rust-collage { --wardrobe-rotation:1.00deg; --wardrobe-gap:0.35rem; }
+.collection--set-rust-collage .wardrobe-shell { margin-left:3%; width:87%; }
+.collection--set-rust-collage .garment:nth-child(2n) { transform:translateY(-18px) rotate(0.0deg); }
+.collection--set-rust-collage .garment:nth-child(2n+1) { transform:translateY(0px) rotate(-2.2deg); }
+.collection--set-rust-collage .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-red-weave.png'); right:12%; bottom:12%; transform:rotate(2deg); }
+.collection--set-rust-collage .theme-wardrobe-decor__slip { right:12%; top:16%; transform:rotate(-15deg); }
+.collection--set-rust-collage .theme-wardrobe-decor__ruler { left:12%; top:14%; transform:rotate(-15deg); }
+
+.collection--set-midnight-fabric { --wardrobe-rotation:1.67deg; --wardrobe-gap:0.6rem; }
+.collection--set-midnight-fabric .wardrobe-shell { margin-left:5%; width:85%; }
+.collection--set-midnight-fabric .garment:nth-child(2n) { transform:translateY(-9px) rotate(1.2deg); }
+.collection--set-midnight-fabric .garment:nth-child(2n+1) { transform:translateY(8px) rotate(-1.1deg); }
+.collection--set-midnight-fabric .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-burgundy.png'); right:13%; bottom:2%; transform:rotate(19deg); }
+.collection--set-midnight-fabric .theme-wardrobe-decor__slip { right:13%; top:17%; transform:rotate(-8deg); }
+.collection--set-midnight-fabric .theme-wardrobe-decor__ruler { left:13%; top:15%; transform:rotate(-6deg); }
+
+.collection--set-paper-slip { --wardrobe-rotation:-1.67deg; --wardrobe-gap:0.85rem; }
+.collection--set-paper-slip .wardrobe-shell { margin-left:-5%; width:85%; }
+.collection--set-paper-slip .garment:nth-child(2n) { transform:translateY(0px) rotate(2.4deg); }
+.collection--set-paper-slip .garment:nth-child(2n+1) { transform:translateY(-16px) rotate(0.0deg); }
+.collection--set-paper-slip .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-gold.png'); right:14%; bottom:3%; transform:rotate(-12deg); }
+.collection--set-paper-slip .theme-wardrobe-decor__slip { right:14%; top:18%; transform:rotate(-1deg); }
+.collection--set-paper-slip .theme-wardrobe-decor__ruler { left:14%; top:16%; transform:rotate(3deg); }
+
+.collection--set-coffee-patchwork { --wardrobe-rotation:-1.00deg; --wardrobe-gap:1.1rem; }
+.collection--set-coffee-patchwork .wardrobe-shell { margin-left:-3%; width:87%; }
+.collection--set-coffee-patchwork .garment:nth-child(2n) { transform:translateY(9px) rotate(3.6deg); }
+.collection--set-coffee-patchwork .garment:nth-child(2n+1) { transform:translateY(-8px) rotate(1.1deg); }
+.collection--set-coffee-patchwork .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-black-knit.png'); right:2%; bottom:4%; transform:rotate(5deg); }
+.collection--set-coffee-patchwork .theme-wardrobe-decor__slip { right:15%; top:6%; transform:rotate(6deg); }
+.collection--set-coffee-patchwork .theme-wardrobe-decor__ruler { left:15%; top:4%; transform:rotate(12deg); }
+
+.collection--set-apricot-noir { --wardrobe-rotation:-0.33deg; --wardrobe-gap:1.4rem; }
+.collection--set-apricot-noir .wardrobe-shell { margin-left:-1%; width:89%; }
+.collection--set-apricot-noir .garment:nth-child(2n) { transform:translateY(18px) rotate(-3.6deg); }
+.collection--set-apricot-noir .garment:nth-child(2n+1) { transform:translateY(0px) rotate(2.2deg); }
+.collection--set-apricot-noir .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-red-weave.png'); right:3%; bottom:5%; transform:rotate(22deg); }
+.collection--set-apricot-noir .theme-wardrobe-decor__slip { right:16%; top:7%; transform:rotate(13deg); }
+.collection--set-apricot-noir .theme-wardrobe-decor__ruler { left:16%; top:5%; transform:rotate(-21deg); }
+
+.collection--set-tailors-cutting-mat { --wardrobe-rotation:0.33deg; --wardrobe-gap:0.35rem; }
+.collection--set-tailors-cutting-mat .wardrobe-shell { margin-left:1%; width:89%; }
+.collection--set-tailors-cutting-mat .garment:nth-child(2n) { transform:translateY(-18px) rotate(-2.4deg); }
+.collection--set-tailors-cutting-mat .garment:nth-child(2n+1) { transform:translateY(8px) rotate(-2.2deg); }
+.collection--set-tailors-cutting-mat .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-burgundy.png'); right:4%; bottom:6%; transform:rotate(-9deg); }
+.collection--set-tailors-cutting-mat .theme-wardrobe-decor__slip { right:17%; top:8%; transform:rotate(-14deg); }
+.collection--set-tailors-cutting-mat .theme-wardrobe-decor__ruler { left:17%; top:6%; transform:rotate(-12deg); }
+
+.collection--set-tailors-notes { --wardrobe-rotation:1.00deg; --wardrobe-gap:0.6rem; }
+.collection--set-tailors-notes .wardrobe-shell { margin-left:3%; width:87%; }
+.collection--set-tailors-notes .garment:nth-child(2n) { transform:translateY(-9px) rotate(-1.2deg); }
+.collection--set-tailors-notes .garment:nth-child(2n+1) { transform:translateY(-16px) rotate(-1.1deg); }
+.collection--set-tailors-notes .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-gold.png'); right:5%; bottom:7%; transform:rotate(8deg); }
+.collection--set-tailors-notes .theme-wardrobe-decor__slip { right:18%; top:9%; transform:rotate(-7deg); }
+.collection--set-tailors-notes .theme-wardrobe-decor__ruler { left:2%; top:7%; transform:rotate(-3deg); }
+
+.collection--set-tailors-pattern-room { --wardrobe-rotation:1.67deg; --wardrobe-gap:0.85rem; }
+.collection--set-tailors-pattern-room .wardrobe-shell { margin-left:5%; width:85%; }
+.collection--set-tailors-pattern-room .garment:nth-child(2n) { transform:translateY(0px) rotate(0.0deg); }
+.collection--set-tailors-pattern-room .garment:nth-child(2n+1) { transform:translateY(-8px) rotate(0.0deg); }
+.collection--set-tailors-pattern-room .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-black-knit.png'); right:6%; bottom:8%; transform:rotate(-23deg); }
+.collection--set-tailors-pattern-room .theme-wardrobe-decor__slip { right:2%; top:10%; transform:rotate(0deg); }
+.collection--set-tailors-pattern-room .theme-wardrobe-decor__ruler { left:3%; top:8%; transform:rotate(6deg); }
+
+.collection--set-apricot-muslin { --wardrobe-rotation:-1.67deg; --wardrobe-gap:1.1rem; }
+.collection--set-apricot-muslin .wardrobe-shell { margin-left:-5%; width:85%; }
+.collection--set-apricot-muslin .garment:nth-child(2n) { transform:translateY(9px) rotate(1.2deg); }
+.collection--set-apricot-muslin .garment:nth-child(2n+1) { transform:translateY(0px) rotate(1.1deg); }
+.collection--set-apricot-muslin .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-red-weave.png'); right:7%; bottom:9%; transform:rotate(-6deg); }
+.collection--set-apricot-muslin .theme-wardrobe-decor__slip { right:3%; top:11%; transform:rotate(7deg); }
+.collection--set-apricot-muslin .theme-wardrobe-decor__ruler { left:4%; top:9%; transform:rotate(15deg); }
+
+.collection--set-apricot-coffee { --wardrobe-rotation:-1.00deg; --wardrobe-gap:1.4rem; }
+.collection--set-apricot-coffee .wardrobe-shell { margin-left:-3%; width:87%; }
+.collection--set-apricot-coffee .garment:nth-child(2n) { transform:translateY(18px) rotate(2.4deg); }
+.collection--set-apricot-coffee .garment:nth-child(2n+1) { transform:translateY(8px) rotate(2.2deg); }
+.collection--set-apricot-coffee .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-burgundy.png'); right:8%; bottom:10%; transform:rotate(11deg); }
+.collection--set-apricot-coffee .theme-wardrobe-decor__slip { right:4%; top:12%; transform:rotate(14deg); }
+.collection--set-apricot-coffee .theme-wardrobe-decor__ruler { left:5%; top:10%; transform:rotate(-18deg); }
+
+.collection--set-peach-ledger { --wardrobe-rotation:-0.33deg; --wardrobe-gap:0.35rem; }
+.collection--set-peach-ledger .wardrobe-shell { margin-left:-1%; width:89%; }
+.collection--set-peach-ledger .garment:nth-child(2n) { transform:translateY(-18px) rotate(3.6deg); }
+.collection--set-peach-ledger .garment:nth-child(2n+1) { transform:translateY(-16px) rotate(-2.2deg); }
+.collection--set-peach-ledger .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-gold.png'); right:9%; bottom:11%; transform:rotate(-20deg); }
+.collection--set-peach-ledger .theme-wardrobe-decor__slip { right:5%; top:13%; transform:rotate(-13deg); }
+.collection--set-peach-ledger .theme-wardrobe-decor__ruler { left:6%; top:11%; transform:rotate(-9deg); }
+
+.collection--set-sunset-ink { --wardrobe-rotation:0.33deg; --wardrobe-gap:0.6rem; }
+.collection--set-sunset-ink .wardrobe-shell { margin-left:1%; width:89%; }
+.collection--set-sunset-ink .garment:nth-child(2n) { transform:translateY(-9px) rotate(-3.6deg); }
+.collection--set-sunset-ink .garment:nth-child(2n+1) { transform:translateY(-8px) rotate(-1.1deg); }
+.collection--set-sunset-ink .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-black-knit.png'); right:10%; bottom:12%; transform:rotate(-3deg); }
+.collection--set-sunset-ink .theme-wardrobe-decor__slip { right:6%; top:14%; transform:rotate(-6deg); }
+.collection--set-sunset-ink .theme-wardrobe-decor__ruler { left:7%; top:12%; transform:rotate(0deg); }
+
+.collection--set-apricot-patchwork { --wardrobe-rotation:1.00deg; --wardrobe-gap:0.85rem; }
+.collection--set-apricot-patchwork .wardrobe-shell { margin-left:3%; width:87%; }
+.collection--set-apricot-patchwork .garment:nth-child(2n) { transform:translateY(0px) rotate(-2.4deg); }
+.collection--set-apricot-patchwork .garment:nth-child(2n+1) { transform:translateY(0px) rotate(0.0deg); }
+.collection--set-apricot-patchwork .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-red-weave.png'); right:11%; bottom:2%; transform:rotate(14deg); }
+.collection--set-apricot-patchwork .theme-wardrobe-decor__slip { right:7%; top:15%; transform:rotate(1deg); }
+.collection--set-apricot-patchwork .theme-wardrobe-decor__ruler { left:8%; top:13%; transform:rotate(9deg); }
+
+.collection--set-soft-saffron { --wardrobe-rotation:1.67deg; --wardrobe-gap:1.1rem; }
+.collection--set-soft-saffron .wardrobe-shell { margin-left:5%; width:85%; }
+.collection--set-soft-saffron .garment:nth-child(2n) { transform:translateY(9px) rotate(-1.2deg); }
+.collection--set-soft-saffron .garment:nth-child(2n+1) { transform:translateY(8px) rotate(1.1deg); }
+.collection--set-soft-saffron .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-burgundy.png'); right:12%; bottom:3%; transform:rotate(-17deg); }
+.collection--set-soft-saffron .theme-wardrobe-decor__slip { right:8%; top:16%; transform:rotate(8deg); }
+.collection--set-soft-saffron .theme-wardrobe-decor__ruler { left:9%; top:14%; transform:rotate(18deg); }
+
+.collection--set-notebook-buttons { --wardrobe-rotation:-1.67deg; --wardrobe-gap:1.4rem; }
+.collection--set-notebook-buttons .wardrobe-shell { margin-left:-5%; width:85%; }
+.collection--set-notebook-buttons .garment:nth-child(2n) { transform:translateY(18px) rotate(0.0deg); }
+.collection--set-notebook-buttons .garment:nth-child(2n+1) { transform:translateY(-16px) rotate(2.2deg); }
+.collection--set-notebook-buttons .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-gold.png'); right:13%; bottom:4%; transform:rotate(0deg); }
+.collection--set-notebook-buttons .theme-wardrobe-decor__slip { right:9%; top:17%; transform:rotate(15deg); }
+.collection--set-notebook-buttons .theme-wardrobe-decor__ruler { left:10%; top:15%; transform:rotate(-15deg); }
+
+.collection--set-pinned-slip { --wardrobe-rotation:-1.00deg; --wardrobe-gap:0.35rem; }
+.collection--set-pinned-slip .wardrobe-shell { margin-left:-3%; width:87%; }
+.collection--set-pinned-slip .garment:nth-child(2n) { transform:translateY(-18px) rotate(1.2deg); }
+.collection--set-pinned-slip .garment:nth-child(2n+1) { transform:translateY(-8px) rotate(-2.2deg); }
+.collection--set-pinned-slip .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-black-knit.png'); right:14%; bottom:5%; transform:rotate(17deg); }
+.collection--set-pinned-slip .theme-wardrobe-decor__slip { right:10%; top:18%; transform:rotate(-12deg); }
+.collection--set-pinned-slip .theme-wardrobe-decor__ruler { left:11%; top:16%; transform:rotate(-6deg); }
+
+.collection--set-workroom-collage { --wardrobe-rotation:-0.33deg; --wardrobe-gap:0.6rem; }
+.collection--set-workroom-collage .wardrobe-shell { margin-left:-1%; width:89%; }
+.collection--set-workroom-collage .garment:nth-child(2n) { transform:translateY(-9px) rotate(2.4deg); }
+.collection--set-workroom-collage .garment:nth-child(2n+1) { transform:translateY(0px) rotate(-1.1deg); }
+.collection--set-workroom-collage .theme-wardrobe-decor__swatch { background-image:url('/assets/fabric-red-weave.png'); right:2%; bottom:6%; transform:rotate(-14deg); }
+.collection--set-workroom-collage .theme-wardrobe-decor__slip { right:11%; top:6%; transform:rotate(-5deg); }
+.collection--set-workroom-collage .theme-wardrobe-decor__ruler { left:12%; top:4%; transform:rotate(3deg); }
+
+.collection--set-tailors-table .theme-wardrobe-decor__ruler { width:26%; height:2.4rem; }
+.collection--set-tailors-table .theme-wardrobe-decor__shears { font-size:clamp(3rem,7vw,7rem); }
+.landing--set-tailors-table .worktable-props { z-index:3; }
+
+.collection--set-tailors-cutting-mat .theme-wardrobe-decor__ruler { width:26%; height:2.4rem; }
+.collection--set-tailors-cutting-mat .theme-wardrobe-decor__shears { font-size:clamp(3rem,7vw,7rem); }
+.landing--set-tailors-cutting-mat .worktable-props { z-index:3; }
+
+.collection--set-tailors-notes .theme-wardrobe-decor__ruler { width:26%; height:2.4rem; }
+.collection--set-tailors-notes .theme-wardrobe-decor__shears { font-size:clamp(3rem,7vw,7rem); }
+.landing--set-tailors-notes .worktable-props { z-index:3; }
+
+.collection--set-tailors-pattern-room .theme-wardrobe-decor__ruler { width:26%; height:2.4rem; }
+.collection--set-tailors-pattern-room .theme-wardrobe-decor__shears { font-size:clamp(3rem,7vw,7rem); }
+.landing--set-tailors-pattern-room .worktable-props { z-index:3; }
+
+.collection--set-workroom-collage .theme-wardrobe-decor__ruler { width:26%; height:2.4rem; }
+.collection--set-workroom-collage .theme-wardrobe-decor__shears { font-size:clamp(3rem,7vw,7rem); }
+.landing--set-workroom-collage .worktable-props { z-index:3; }
+
+/* Explicit readable foregrounds for all interactive surfaces and labels. */
+.set-picker, .concept-picker { color:#251915 !important; }
+.set-picker button, .concept-picker button { color:#251915 !important; }
+.set-picker button i, .concept-picker button i { color:#48352b !important; opacity:1; }
+.landing .fabric-swatch, .collection .fabric-swatch { color:#251915; }
+.collection .wardrobe-interior, .collection .garment, .collection .garment-label { color:#251915; }
+.signup-overlay .signup-sheet { color:#251915; }
+.signup-overlay input { color:#251915; }
+.signup-overlay input::placeholder { color:#66554c; opacity:1; }
+.signup-overlay .signup-sheet form > button, .signup-overlay .signup-success > button { color:#fff8ef; background:#42251f; border-color:#42251f; }
+.collection .circle-button { background:#f5e7d5; color:#241815; }
+.collection .wardrobe-caption { color:#251915; }
+@media(max-width:800px) { .theme-wardrobe-decor__slip { font-size:.75rem; padding:.4rem; } .theme-wardrobe-decor__shears { font-size:2.8rem; } .theme-wardrobe-decor__ruler { height:1.2rem; } .collection .wardrobe-shell { margin-left:auto !important; margin-right:auto; width:96% !important; } }
